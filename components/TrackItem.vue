@@ -1,20 +1,15 @@
 <template>
 <li class="d-flex border-bottom p-3">
-   <!--  {{ nowPlaying}}  -->
-   
-        <a href="#" class="track-play" @click.prevent="$emit('handlePlayPause', index, nowActive)" :data-id="track.id" :data-index="index">
-         <!-- <span v-bind:class="{ 'fas fa-pause': this.$store.player.playing, 'icon-control-play': !this.$store.player.playing }"></span>
-           -->
-             <span class="fas fa-play" v-if="!nowPlaying"></span>
-             <span class="fas fa-pause" v-if="nowPlaying"></span>
-            
-             <img class="rounded" :src="'https://www.realmusic.ru/img.php?src=/media/bandimg/' + (track.page_id % 10) + '/' + track.page_id + '.jpg&w=60&h=60'" />
-         </a>
-     
-
-
+    <a href="#" class="track-play" @click.prevent="$emit('handlePlayPause', currentPosition, nowActive)">
+        <!-- <span v-bind:class="{ 'fas fa-pause': this.$store.player.playing, 'icon-control-play': !this.$store.player.playing }"></span>
+        -->
+            <span class="fas fa-play" v-if="!nowPlaying"></span>
+            <span class="fas fa-pause" v-if="nowPlaying"></span>
+        
+            <img class="rounded" :src="'https://www.realmusic.ru/img.php?src=/media/bandimg/' + (track.page_id % 10) + '/' + track.page_id + '.jpg&w=60&h=60'" />
+        </a>
     <div class="pl-2 w-100">
-        <nuxt-link :to="{ name: 'pages-id', params: { id: track.page_id }}" class="font-weight-bold">{{ track.track_title }}</nuxt-link>
+        <nuxt-link :to="{ name: 'pages-id', params: { id: track.page_id }}" class="font-weight-bold">{{ track.title }}</nuxt-link>
         <p class="font-italic pt-1 t-13">
         <nuxt-link :to="{ name: 'pages-id', params: { id: track.page_id }}" class="text-nolink">{{ track.page_title }}</nuxt-link>
         </p>
@@ -31,34 +26,41 @@
 </template>
 
 <script>
+
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapGetters, mapActions } = createNamespacedHelpers('playlist')
+
 export default {
   props: {
     track: {
       type: Object,
       required: true,
     },
-    place: {
+    currentPlace: {
         type: String,
+        required: true,
     }, 
-    index: {
+    currentPosition: {
         type: Number,
+        required: true,
     }
   },
-
   computed: {
-    nowPlaying: {
-        get: function () {
-           return (this.nowActive && this.$store.getters.player.playing) ? true : false
-        }
-    }, 
-    nowActive: {
-        get: function () {
-           return (this.$store.getters.position.index == this.index && this.$store.getters.position.place == this.place) ? true : false
-        }
-    }, 
-  }, 
-  beforeUpdate: function() {
-    //console.log('Re-Rendering child component for item: ', this.track)
+     ...mapState([
+       'player',
+       'position',
+       'place',
+      
+    ]),
+    nowPlaying() {
+        return (this.nowActive && this.player) ? true : false
+    },
+    nowActive() {
+        return (this.position == this.currentPosition && this.place == this.currentPlace) ? true : false
+    }
+  },
+  mounted: function() {
+      //console.log("nowPlaying",  this.nowPlaying, "nowActive", this.nowActive)
   }
 }
 </script>

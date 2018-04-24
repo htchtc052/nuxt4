@@ -4,15 +4,21 @@
            <li is="TrackItem" v-for="(track, index) in tracks" 
             v-on:handlePlayPause="handlePlayPause"
             :key="index"
-            :index="index"
             :track="track"
-            :place="place"
+            :currentPosition="index"
+            :currentPlace="place"
           ></li>
+          <h1 class="test1">111</h1>
         </ul>
     </div>
 </template>
 <script>
 import TrackItem from "~/components/TrackItem.vue";
+import tracksHelper from "~/plugins/tracksHelper";
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
+  "playlist"
+);
 
 export default {
   components: {
@@ -22,41 +28,59 @@ export default {
     tracks: {
       type: Array,
       default: function() {
-        return {}
+        return {};
       }
     },
     place: {
-        type: String,
+      type: String
     }
   },
+  computed: {
+    ...mapState(["player", "repeat", "shuffle"]),
+    ...mapGetters(["isNewPlaylist"])
+  },
   methods: {
-      handlePlayPause: function(index, nowActive) {
-        
-        if (nowActive) {
-            if (!this.$store.getters.player.playing) {
-                this.$store.getters.player.play()
-            } else {
-                this.$store.getters.player.pause()
-            }
+    handlePlayPause: function(index, nowActive) {
+      console.log("handlePlayPause", "shuffle", this.shuffle);
+      if (nowActive) {
+        if (!this.player.playing) {
+          this.player.play();
         } else {
-
-            this.$store.dispatch('setTracks', this.$props.tracks)
-            this.$store.dispatch('setPosition',  {place: this.$props.place, index: index})
-            
-            if (this.$store.getters.isPlayer) {
-                this.$store.dispatch('unsetPlayer')
-            }
-
-            this.$store.dispatch('createPlayer')
-            this.$store.getters.player.play()
+          this.player.pause();
         }
-      },
+      } else {
+        const track = this.$props.tracks[index];
+        this.setTrack(track);
+        // ставим треки если новый плейлист
+        if (this.isNewPlaylist(this.$props.place)) {
+          const mapedTracks = tracksHelper.mapTracksPosition(
+            this.$props.tracks
+          );
+          this.setTracks(mapedTracks);
+        }
+        this.setPosition(index);
+        this.setPlace(this.$props.place);
+        if (this.player) {
+          this.unsetPlayer();
+        }
+        this.createPlayer();
+        this.player.play();
+      }
+    },
+    ...mapActions([
+      "setTracks",
+      "setTrack",
+      "setPosition",
+      "setPlace",
+      "unsetPlayer",
+      "createPlayer"
+    ])
   },
   data: function() {
     return {};
   },
   mounted: function() {
-//    console.log("props", this.$props.tracks, this.$props.place);
+    //const directOrderTracks = tracksHelper.mapTracksPosition(this.$props.tracks);
   }
 };
 </script>

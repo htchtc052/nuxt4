@@ -1,3 +1,5 @@
+const webpack = require('webpack')
+
 module.exports = {
   /*
   ** Headers of the page
@@ -24,16 +26,30 @@ module.exports = {
   },
   modules: [
     ['@nuxtjs/bootstrap-vue', { css: true }],
+  
+     
   ],
   /*
   ** Customize the progress bar color
   */
   loading: { color: '#3B8070' },
-  /*
-  ** Build configuration
-  */
+
+
+ plugins: [
+    { src: '~/plugins/vuejs-noty', ssr: false },
+    { src: '~plugins/tracksHelper.js', ssr: false },
+    { src: '~/plugins/persistedStorage.js', ssr: false }
+  ],
   build: {
     vendor: ['axios'],
+
+    plugins: [
+      new webpack.ProvidePlugin({
+        '$': 'jquery',
+        '_': 'lodash'
+        // ...etc.
+      })
+    ],
     /*
     ** Run ESLint on save
     */

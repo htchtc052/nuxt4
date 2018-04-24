@@ -13,18 +13,18 @@
         </div>
         <div class="wrap position-relative">
             <div class="player__toogle pointer">
-                <span class="icon-arrow-down icons t-12" @click="closePlayer"></span>
+                <span class="icon-arrow-down icons t-12" @click="closePlayer()"></span>
             </div>
             <div class="d-flex pb-3">
                 <div class="border-right d-flex align-items-center px-3">
-                    <span class="pointer p-2 t-18">
-                        <span @click="prev" class="icon-control-rewind icons"></span>
+                    <span class="pointer p-2 t-18" v-if="!(isFirst && !repeat)">
+                        <span @click="prevClick()" class="icon-control-rewind icons"></span>
                     </span>
                     <span class="pointer p-2 t-21 ml-1">
                           <span class="icons" v-bind:class="{ 'icon-control-pause': this.player.playing, 'icon-control-play': !this.player.playing }" @click="this.player.togglePlayback"></span>
                     </span>
-                    <span class="pointer p-2 t-18">
-                        <span @click="next" class="icon-control-forward icons"></span>
+                    <span class="pointer p-2 t-18" v-if="!(isLast && !repeat)">
+                        <span @click="nextClick()" class="icon-control-forward icons"></span>
                     </span>
                 </div>
                 <div class="border-right d-flex align-items-center px-2">
@@ -32,7 +32,7 @@
                         <span class="icon-volume-off icons" @click="volumeUpDown('down')"></span>
                     </span>
                     <div class="progress player__volume">
-                        <div class="progress-bar bg-orange" role="progressbar" :style="'width: ' + this.$store.getters.volume*100 + '%'" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-orange" role="progressbar" :style="'width: ' + volume * 100 + '%'" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <span class="pointer p-2 t-16">
                         <span class="icon-volume-2 icons" @click="volumeUpDown('up')"></span>
@@ -62,6 +62,12 @@
                     <span class="pointer p-2 t-18">
                         <span class="icon-playlist icons"></span>
                     </span>
+                    <span class="pointer p-2 t-18">
+                        <a href="#" @click.prevent="toggleRepeat()" v-text=" repeat ? 'Repeat Yes' : 'Repeat No' "></a>
+                    </span>
+                    <span class="pointer p-2 t-18">
+                          <a href="#" @click.prevent="toggleShuffle()" v-text=" shuffle ? 'Shuffle Yes' : 'Shuffle No' "></a>
+                    </span>
                 </div>
             </div>
         </div>
@@ -70,55 +76,35 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
+  "playlist"
+);
+
 export default {
   computed: {
-    player: {
-      get: function() {
-        return this.$store.getters.player;
-      }
-    },
-    file: {
-      get: function() {
-        return this.$store.getters.file;
-      }
-    },
-    track: {
-      get: function() {
-        let track = this.$store.getters.track[0];
-        track.bandimg =
-          "https://www.realmusic.ru/img.php?src=/media/bandimg/" +
-          track.page_id % 10 +
-          "/" +
-          track.page_id +
-          ".jpg&w=36&h=36";
-        return track;
-      }
-    },
-    // volumeLevel: {
-    //   get: function() {
-    //     return this.player.volume ? this.player.volume * 100 : 0;
-    //   }
-    // }
-  },
-  watch: {
-    player: function(data) {}
+    ...mapGetters(["isFirst", "isLast"]),
+    ...mapState(["player", "volume", "track", "repeat", "shuffle"])
   },
   methods: {
+    prevClick: function() {
+        this.unsetPlayer()
+        this.prev()
+        this.createPlayer()
+        this.player.play()
+    }, 
+    nextClick: function() {
+        this.unsetPlayer()
+        this.next()
+        this.createPlayer()
+        this.player.play()
+    },
     skipTo: function(params) {
       this.player.setSeek(
         params.offsetX /
           params.srcElement.parentElement.clientWidth *
           this.player.duration
       );
-    },
-    prev: function() {
-      this.$store.dispatch("prev");
-    },
-    next: function() {
-      this.$store.dispatch("next");
-    },
-    closePlayer: function() {
-      this.$store.dispatch("closePlayer");
     },
     volumeUpDown: function(type) {
       if (new_volume > 1) new_volume = 1;
@@ -130,8 +116,21 @@ export default {
         var new_volume = (Math.round(this.player.volume * 100) + 10) / 100;
       }
 
-      this.$store.dispatch("setVolume", new_volume);
-    }
+      this.setVolume(new_volume)
+    },
+    ...mapActions([
+      "prev",
+      "next",
+      "unsetPlayer",
+      "createPlayer",
+      "closePlayer",
+      "toggleRepeat",
+      "toggleShuffle",
+      "setVolume"
+    ])
+  },
+  mounted: function() {
+    //console.log("player", this.player);
   }
 };
 </script>
