@@ -21,7 +21,7 @@
                         <span @click="prevClick()" class="icon-control-rewind icons"></span>
                     </span>
                     <span class="pointer p-2 t-21 ml-1">
-                          <span class="icons" v-bind:class="{ 'icon-control-pause': this.player.playing, 'icon-control-play': !this.player.playing }" @click="this.player.togglePlayback"></span>
+                          <span class="icons" v-bind:class="{ 'icon-control-pause': !pause, 'icon-control-play': pause }" @click="pause ? unsetPause() : setPause()"></span>
                     </span>
                     <span class="pointer p-2 t-18" v-if="!(isLast && !repeat)">
                         <span @click="nextClick()" class="icon-control-forward icons"></span>
@@ -84,20 +84,29 @@ const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
 export default {
   computed: {
     ...mapGetters(["isFirst", "isLast"]),
-    ...mapState(["player", "volume", "track", "repeat", "shuffle"])
+    ...mapState(["player", "volume", "track", "repeat", "shuffle", "pause"])
   },
   methods: {
     prevClick: function() {
         this.unsetPlayer()
         this.prev()
         this.createPlayer()
-        this.player.play()
+        
+        if (this.pause) {
+            this.player.pause()
+        } else {
+            this.player.play()
+        }
     }, 
     nextClick: function() {
         this.unsetPlayer()
         this.next()
         this.createPlayer()
-        this.player.play()
+         if (this.pause) {
+            this.player.pause()
+        } else {
+            this.player.play()
+        }
     },
     skipTo: function(params) {
       this.player.setSeek(
@@ -105,6 +114,14 @@ export default {
           params.srcElement.parentElement.clientWidth *
           this.player.duration
       );
+    },
+    setPause: function() {
+        this.$store.dispatch('playlist/setPause')
+        this.player.pause()
+    },
+    unsetPause: function() {
+        this.$store.dispatch('playlist/unsetPause')
+        this.player.play()
     },
     volumeUpDown: function(type) {
       if (new_volume > 1) new_volume = 1;
@@ -126,6 +143,8 @@ export default {
       "closePlayer",
       "toggleRepeat",
       "toggleShuffle",
+      //"setPause",
+      //"unsetPause",
       "setVolume"
     ])
   },

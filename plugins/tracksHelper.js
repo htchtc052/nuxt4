@@ -15,21 +15,9 @@ export default {
       return obj.position == position;
     })
   },
-  trackMoveLastFirst: (tracks) => {
-    const fromIndex = tracks.length - 1
-    const toIndex = 0
-
+  moveTrackByIndex: (tracks, fromIndex, toIndex) => {
     tracks.splice(toIndex, 0, tracks.splice(fromIndex, 1)[0]);
-    console.log(tracks, fromIndex, toIndex)
-
-  },
-  trackMoveFirstLast: (tracks) => {
-    const fromIndex = 0
-    const toIndex = tracks.length - 1
-
-    tracks.splice(toIndex, 0, tracks.splice(fromIndex, 1)[0]);
-    console.log(tracks, fromIndex, toIndex)
-
+    console.log("trackMoveToIndex", tracks.length, fromIndex, toIndex)
   },
   mapOnlyTracksTitles: (tracks) => {
     return _.toArray(_.mapValues(tracks, function (item, key) {

@@ -36,17 +36,19 @@ export default {
     }
   },
   computed: {
-    ...mapState(["player", "repeat", "shuffle"]),
+    ...mapState(["player", "repeat", "shuffle", "pause"]),
     ...mapGetters(["isNewPlaylist"])
   },
   methods: {
     handlePlayPause: function(index, nowActive) {
       console.log("handlePlayPause", "shuffle", this.shuffle);
       if (nowActive) {
-        if (!this.player.playing) {
-          this.player.play();
+        if (this.pause) {
+          this.$store.dispatch('playlist/unsetPause')
+          this.player.play()
         } else {
-          this.player.pause();
+          this.$store.dispatch('playlist/setPause')
+          this.player.pause()
         }
       } else {
         const track = this.$props.tracks[index];

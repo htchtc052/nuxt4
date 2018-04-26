@@ -1,11 +1,7 @@
 <template>
 <li class="d-flex border-bottom p-3">
     <a href="#" class="track-play" @click.prevent="$emit('handlePlayPause', currentPosition, nowActive)">
-        <!-- <span v-bind:class="{ 'fas fa-pause': this.$store.player.playing, 'icon-control-play': !this.$store.player.playing }"></span>
-        -->
-            <span class="fas fa-play" v-if="!nowPlaying"></span>
-            <span class="fas fa-pause" v-if="nowPlaying"></span>
-        
+            <span :class="{'fas fa-play' : !nowPlaying, 'fas fa-pause' : nowPlaying}"></span>
             <img class="rounded" :src="'https://www.realmusic.ru/img.php?src=/media/bandimg/' + (track.page_id % 10) + '/' + track.page_id + '.jpg&w=60&h=60'" />
         </a>
     <div class="pl-2 w-100">
@@ -50,10 +46,11 @@ export default {
        'player',
        'position',
        'place',
+       'pause'
       
     ]),
     nowPlaying() {
-        return (this.nowActive && this.player) ? true : false
+        return (this.nowActive && !this.pause) ? true : false
     },
     nowActive() {
         return (this.position == this.currentPosition && this.place == this.currentPlace) ? true : false

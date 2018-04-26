@@ -49,7 +49,8 @@ export default {
      if (this.$store.getters["playlist/track"] && this.$store.getters["playlist/tracksSize"]) {
       console.log("need_restore")
       this.$store.dispatch('playlist/createPlayer')
-      this.$store.getters["playlist/player"].pause()
+      this.$store.dispatch('playlist/setPause')
+      this.$store.getters['playlist/player'].pause()
     }
   },
   data: function() {
