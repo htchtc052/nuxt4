@@ -105,7 +105,7 @@ const actions = {
       if (!state.repeat) return;
         if (state.shuffle) {
           let tracks = state.tracks
-          tracksHelper.moveTrackByIndex(tracks, tracks.size - 1, 0)
+          tracksHelper.moveTrackByIndex(tracks, tracks.length - 1, 0)
           commit('SET_TRACKS', tracks)
           const track = state.tracks[state.position]
           commit('SET_TRACK', track)
@@ -139,7 +139,7 @@ const actions = {
       if (!state.repeat) return;
         if (state.shuffle) {
           let tracks = state.tracks
-          tracksHelper.moveTrackByIndex(tracks, 0, tracks.size - 1)
+          tracksHelper.moveTrackByIndex(tracks, 0, tracks.length - 1)
           commit('SET_TRACKS', tracks)
           const track = state.tracks[state.position]
           commit('SET_TRACK', track)

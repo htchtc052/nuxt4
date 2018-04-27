@@ -45,8 +45,9 @@ export default {
     
  }, 
   mounted: function() {
-   console.log(5555, this.$store.getters["playlist/track"])
-     if (this.$store.getters["playlist/track"] && this.$store.getters["playlist/tracksSize"]) {
+    console.log(this.$testing.test())
+
+    if (this.$store.getters["playlist/track"] && this.$store.getters["playlist/tracksSize"]) {
       console.log("need_restore")
       this.$store.dispatch('playlist/createPlayer')
       this.$store.dispatch('playlist/setPause')

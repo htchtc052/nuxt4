@@ -38,7 +38,8 @@ module.exports = {
  plugins: [
     { src: '~/plugins/vuejs-noty', ssr: false },
     { src: '~plugins/tracksHelper.js', ssr: false },
-    { src: '~/plugins/persistedStorage.js', ssr: false }
+    { src: '~/plugins/persistedStorage.js', ssr: false },
+    { src: '~plugins/testing.js', ssr: false },
   ],
   build: {
     vendor: ['axios'],
