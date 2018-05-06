@@ -1,5 +1,5 @@
 export default {
-  setLocalStorageItem: (key, item) => {
+ /*  setLocalStorageItem: (key, item) => {
     window.localStorage.setItem(key, JSON.stringify(item));
   },
   getLocalStorageItem: (key) => {
@@ -15,5 +15,5 @@ export default {
     if (localStorage.getItem(key)) {
        window.localStorage.removeItem(key);
     }
-  }
+  } */
 }

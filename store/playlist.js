@@ -9,7 +9,7 @@ const state = () => ({
   place: null,
   tracks: [],
   track: {},
-  player: null,
+  playerActive: false,
   repeat: false,
   shuffle: false,
   pause: false,
@@ -32,16 +32,29 @@ const getters = {
   isNewPlaylist:  state => (place) => {
     return !(place == state.place && state.tracks.length)
   },
-  //pause: state => state.pause,
-  player: state => state.player,
+  pause: state => state.pause,
+  playerActive: state => state.playerActive,
+  volume: state => state.volume,
+  repeat: state => state.repeat,
+  shuffle: state => state.shuffle
 }
 const mutations =  {
   ['SET_VOLUME'](state, volume) {
-    state.player.setVolume(volume)
     state.volume = volume
   },
-  ['SET_PLAYER'](state, player) {
-    state.player = player
+  ['SET_PLAYER_ACTIVE'](state) {
+    state.playerActive = true
+  },
+  ['UNSET_PLAYER_ACTIVE'](state) {
+    state.playerActive = false
+  },
+ ['CLOSE_PLAYER'](state) {
+    state.playerActive = false
+    state.position = 0
+    state.place = null
+    state.tracks = []
+    state.track = {}
+
   },
   ['SET_TRACKS'](state, tracks) {
     state.tracks = tracks
@@ -62,45 +75,33 @@ const mutations =  {
   ['TOGGLE_REPEAT'](state) {
       state.repeat = !state.repeat
   },
-  ['TOGGLE_SHUFFLE'](state) {
+  ['TOGGLE_SHUFFLE'](state, getters) {
     state.shuffle = !state.shuffle
     if (state.shuffle) {
       let tracks = state.tracks
       tracks = _.shuffle(tracks)
       state.tracks = tracks
-      const currentTrackIndex = tracksHelper.getKeyByPositionForTrack(tracks, state.position)
-      // console.log("currentTrackIndex after shuffle", currentTrackIndex)
-      tracksHelper.moveTrackByIndex(tracks, currentTrackIndex, 0)
+      //move current track to first position after shuffle
+      const index = tracksHelper.getKeyByPositionForTrack(tracks, state.position)
+      console.log("before moveTrackByIndex", "tracks.length", tracks.length, "position", state.position, "index", index)
+      console.log("track before move", tracks[index].title);
+      tracksHelper.moveTrackByIndex(tracks, index, 0)
+      console.log("track before move", tracks[0].title);
       state.position = 0
-
     } else {
       state.position = state.track.position
     }
-
   },
   ['SET_PAUSE'](state) {
     state.pause = true
-     // this.state.player.pause()
   },
   ['UNSET_PAUSE'](state) {
     state.pause = false
-    //this.state.player.play()
   },
-  ['CLOSE_PLAYER'](state) {
-    state.player.$destroy()
-    state.player = null
-    state.position = 0
-    state.place = null
-    state.tracks = []
-    state.track = {}
-
-  }
 }
 const actions = {
-  setVolume({commit}, volume) {
-    commit('SET_VOLUME', volume)
-  },
   prev({commit, state, getters}) {
+    console.log("action prev")
     if (getters.isFirst) {
       if (!state.repeat) return;
         if (state.shuffle) {
@@ -135,6 +136,7 @@ const actions = {
     
   },
   next({commit, state, getters }) {
+    console.log("action next")
     if (getters.isLast) {
       if (!state.repeat) return;
         if (state.shuffle) {
@@ -167,31 +169,6 @@ const actions = {
       }
     }
   },
-  createPlayer({commit, state, dispatch, getters}) {
-    const playerCtor = Vue.extend({
-      mixins: [
-        VueHowler
-      ],
-    });
-    const player = new playerCtor({
-      propsData: {
-        sources: [getters.track.file],
-        html5: true,
-        autoplay: false,
-        preload: false
-      }
-    })
-    player.setVolume(state.volume)
-    player.$on('stop', function (selected) {
-      if (!state.repeat) return;
-      dispatch('unsetPlayer')
-      dispatch('next')
-      dispatch('createPlayer')
-      state.player.play()
-    });
-    
-    commit('SET_PLAYER', player)
-  },
   setTracks({ commit }, tracks) {
     commit('SET_TRACKS', tracks)
   },
@@ -204,22 +181,7 @@ const actions = {
   setPlace({ commit }, place) {
     commit('SET_PLACE', place)
   },
-  unsetPlayer({commit}) {
-    commit('UNSET_PLAYER')
-  },
-  closePlayer({commit}) {
-    commit('CLOSE_PLAYER')
-  },
-  toggleRepeat({commit}) {
-    commit('TOGGLE_REPEAT')
-  },
-  toggleShuffle({commit}) {
-    commit('TOGGLE_SHUFFLE')
-  }, setPause({commit}) {
-    commit('SET_PAUSE')
-  }, unsetPause({commit}) {
-    commit('UNSET_PAUSE')
-  }
+
 }
 
 export default

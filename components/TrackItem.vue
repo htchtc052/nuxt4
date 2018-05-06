@@ -43,11 +43,9 @@ export default {
   },
   computed: {
      ...mapState([
-       'player',
        'position',
        'place',
        'pause'
-      
     ]),
     nowPlaying() {
         return (this.nowActive && !this.pause) ? true : false

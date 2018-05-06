@@ -1,7 +1,6 @@
 <template>
 <div>
-   <div id="player" class="player"  v-if="this.player">
-
+   <div id="player" class="player"  v-if="this.player ? true : false">
         <div @click="skipTo" class="player__progress position-relative">
             <div class="progress rounded-0 pointer">
                 <div class="progress-bar bg-orange" role="progressbar" :style="'width: ' + (this.player.progress * 100) + '%'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -63,10 +62,10 @@
                         <span class="icon-playlist icons"></span>
                     </span>
                     <span class="pointer p-2 t-18">
-                        <a href="#" @click.prevent="toggleRepeat()" v-text=" repeat ? 'Repeat Yes' : 'Repeat No' "></a>
+                        <a href="#" @click.prevent="TOGGLE_REPEAT()" v-text=" repeat ? 'Repeat Yes' : 'Repeat No' "></a>
                     </span>
                     <span class="pointer p-2 t-18">
-                          <a href="#" @click.prevent="toggleShuffle()" v-text=" shuffle ? 'Shuffle Yes' : 'Shuffle No' "></a>
+                          <a href="#" @click.prevent="TOGGLE_SHUFFLE()" v-text=" shuffle ? 'Shuffle Yes' : 'Shuffle No' "></a>
                     </span>
                 </div>
             </div>
@@ -76,37 +75,46 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { createNamespacedHelpers } from "vuex";
-const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
+const { mapState, mapGetters, mapActions, mapMutations } = createNamespacedHelpers(
   "playlist"
 );
 
 export default {
+  data: () => {
+    return {};
+  },
   computed: {
-    ...mapGetters(["isFirst", "isLast"]),
-    ...mapState(["player", "volume", "track", "repeat", "shuffle", "pause"])
+    ...mapGetters(["isFirst", "isLast", "volume"]),
+    ...mapState([
+      "playerActive",
+      "track",
+      "repeat",
+      "shuffle",
+      "pause"
+    ]),
+    player() {
+      return this.playerActive ? this.$player : null;
+    }
   },
   methods: {
     prevClick: function() {
-        this.unsetPlayer()
-        this.prev()
-        this.createPlayer()
-        
-        if (this.pause) {
-            this.player.pause()
-        } else {
-            this.player.play()
-        }
-    }, 
+      this.$store.dispatch("playlist/prev");
+      this.$createPlayer();
+      this.restorePlayPause();
+    },
     nextClick: function() {
-        this.unsetPlayer()
-        this.next()
-        this.createPlayer()
-         if (this.pause) {
-            this.player.pause()
-        } else {
-            this.player.play()
-        }
+      this.$store.dispatch("playlist/next");
+      this.$createPlayer();
+      this.restorePlayPause();
+    },
+    restorePlayPause: function() {
+      if (this.$store.getters["playlist/pause"]) {
+        this.$player.pause();
+      } else {
+        this.$player.play();
+      }
     },
     skipTo: function(params) {
       this.player.setSeek(
@@ -116,94 +124,37 @@ export default {
       );
     },
     setPause: function() {
-        this.$store.dispatch('playlist/setPause')
-        this.player.pause()
+      this.$store.commit("playlist/SET_PAUSE");
+      this.player.pause();
     },
     unsetPause: function() {
-        this.$store.dispatch('playlist/unsetPause')
-        this.player.play()
+      this.$store.commit("playlist/UNSET_PAUSE");
+      this.player.play();
+    },
+    closePlayer: function() {
+      this.$player.$destroy();
+      this.$player = null;
+      this.$store.commit("playlist/CLOSE_PLAYER");
     },
     volumeUpDown: function(type) {
       if (new_volume > 1) new_volume = 1;
       if (new_volume < 0) new_volume = 0;
 
       if (type == "down") {
-        var new_volume = (Math.round(this.player.volume * 100) - 10) / 100;
+        var new_volume = (Math.round(this.$player.volume * 100) - 10) / 100;
       } else {
-        var new_volume = (Math.round(this.player.volume * 100) + 10) / 100;
+        var new_volume = (Math.round(this.$player.volume * 100) + 10) / 100;
       }
 
-      this.setVolume(new_volume)
+      this.$player.setVolume(new_volume);
+      this.$store.commit("playlist/SET_VOLUME", new_volume);
     },
-    ...mapActions([
-      "prev",
-      "next",
-      "unsetPlayer",
-      "createPlayer",
-      "closePlayer",
-      "toggleRepeat",
-      "toggleShuffle",
-      //"setPause",
-      //"unsetPause",
-      "setVolume"
-    ])
+    ...mapMutations(["TOGGLE_REPEAT", "TOGGLE_SHUFFLE"])
   },
   mounted: function() {
-    //console.log("player", this.player);
+    
   }
 };
 </script>
 
 
-<style>
-.player {
-  background-color: rgba(256, 256, 256, 0.95);
-  box-shadow: 0 0 5px 0 #b7b7b7;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  z-index: 100;
-}
-.player__toogle {
-  position: absolute;
-  right: -10px;
-  top: -37px;
-  padding: 0.15rem 0.25rem 0.05rem;
-  line-height: 12px;
-  border-radius: 3px 3px 0 0;
-  background-color: #ee8803;
-  color: #fff;
-}
-.player .icons {
-  opacity: 0.75;
-}
-.player .icons:hover {
-  opacity: 1;
-}
-ee8803 .player__close {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  font-size: 20px;
-}
-.player__volume {
-  height: 5px;
-  width: 50px;
-}
-.player__progress .progress {
-  height: 6px;
-}
-
-@media (min-width: 1600px) {
-  .player {
-    width: 980px;
-    left: calc(50% - 490px);
-  }
-  .player__toogle {
-    right: -20px;
-    top: -23px;
-    border-radius: 0 3px 3px 0;
-  }
-}
-</style>

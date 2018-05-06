@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import Vue from "vue"
 import Logo from "~/components/Logo.vue";
 import UserMenu from "~/components/UserMenu.vue";
 import MainMenu from "~/components/MainMenu.vue";
@@ -45,13 +46,13 @@ export default {
     
  }, 
   mounted: function() {
-    console.log(this.$testing.test())
 
     if (this.$store.getters["playlist/track"] && this.$store.getters["playlist/tracksSize"]) {
       console.log("need_restore")
-      this.$store.dispatch('playlist/createPlayer')
-      this.$store.dispatch('playlist/setPause')
-      this.$store.getters['playlist/player'].pause()
+      this.$createPlayer()
+      this.$player.pause()
+      this.$store.commit("playlist/SET_PAUSE")
+      this.$store.commit("playlist/SET_PLAYER_ACTIVE")
     }
   },
   data: function() {
@@ -63,4 +64,5 @@ export default {
 <style lang="scss">
 @import "~/node_modules/vuejs-noty/dist/vuejs-noty.css";
 @import "~/assets/css/old_global.css";
+//@import "~/assets/css/player.css";
 </style>

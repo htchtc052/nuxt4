@@ -17,7 +17,7 @@ export default {
   },
   moveTrackByIndex: (tracks, fromIndex, toIndex) => {
     tracks.splice(toIndex, 0, tracks.splice(fromIndex, 1)[0]);
-    console.log("trackMoveToIndex", tracks.length, fromIndex, toIndex)
+    console.log("trackMoveToIndex",  "tracks.length", tracks.length, "fromIndex", fromIndex, "toIndex", toIndex)
   },
   mapOnlyTracksTitles: (tracks) => {
     return _.toArray(_.mapValues(tracks, function (item, key) {

@@ -8,13 +8,14 @@
             :currentPosition="index"
             :currentPlace="place"
           ></li>
-          <h1 class="test1">111</h1>
         </ul>
     </div>
 </template>
 <script>
+import Vue from "vue";
 import TrackItem from "~/components/TrackItem.vue";
 import tracksHelper from "~/plugins/tracksHelper";
+//import playerHelper from "~/plugins/playerHelper";
 import { createNamespacedHelpers } from "vuex";
 const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
   "playlist"
@@ -36,22 +37,26 @@ export default {
     }
   },
   computed: {
-    ...mapState(["player", "repeat", "shuffle", "pause"]),
+    ...mapState(["repeat", "shuffle", "pause"]),
     ...mapGetters(["isNewPlaylist"])
   },
   methods: {
     handlePlayPause: function(index, nowActive) {
-      console.log("handlePlayPause", "shuffle", this.shuffle);
+      console.log("handlePlayPause", "index", index, "nowActive", nowActive);
+      
       if (nowActive) {
+        if (!this.$player) return
+        
         if (this.pause) {
-          this.$store.dispatch('playlist/unsetPause')
-          this.player.play()
+          this.$player.play();
+          this.$store.commit("playlist/UNSET_PAUSE");
         } else {
-          this.$store.dispatch('playlist/setPause')
-          this.player.pause()
+          this.$player.pause();
+          this.$store.commit("playlist/SET_PAUSE");
         }
       } else {
         const track = this.$props.tracks[index];
+
         this.setTrack(track);
         // ставим треки если новый плейлист
         if (this.isNewPlaylist(this.$props.place)) {
@@ -62,21 +67,15 @@ export default {
         }
         this.setPosition(index);
         this.setPlace(this.$props.place);
-        if (this.player) {
-          this.unsetPlayer();
-        }
-        this.createPlayer();
-        this.player.play();
+
+        //console.log(222, this.$player)
+        this.$createPlayer()
+        //console.log(222, this.$player)
+        this.$player.play()
+        this.$store.commit("playlist/SET_PLAYER_ACTIVE")
       }
     },
-    ...mapActions([
-      "setTracks",
-      "setTrack",
-      "setPosition",
-      "setPlace",
-      "unsetPlayer",
-      "createPlayer"
-    ])
+    ...mapActions(["setTracks", "setTrack", "setPosition", "setPlace"])
   },
   data: function() {
     return {};

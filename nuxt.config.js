@@ -39,7 +39,7 @@ module.exports = {
     { src: '~/plugins/vuejs-noty', ssr: false },
     { src: '~plugins/tracksHelper.js', ssr: false },
     { src: '~/plugins/persistedStorage.js', ssr: false },
-    { src: '~plugins/testing.js', ssr: false },
+    { src: '~plugins/howlerPlayer.js', ssr: false },
   ],
   build: {
     vendor: ['axios'],
