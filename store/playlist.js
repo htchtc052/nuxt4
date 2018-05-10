@@ -13,9 +13,9 @@ const state = () => ({
   repeat: false,
   shuffle: false,
   pause: false,
+ // play: false,
   duration: 0,
   seek: 0,
-  playing: false,
 })
 
 const getters = {
@@ -23,7 +23,7 @@ const getters = {
   place: state => state.place,
   track: state => {
     if (!state.track.id) return {};
-    let track = {}
+    const track = state.track
     track.file = tracksHelper.getFile(state.track)
     track.bandimg = tracksHelper.getBandImage(state.track)
     return track;
@@ -42,7 +42,7 @@ const getters = {
   shuffle: state => state.shuffle,
   duration: state => state.duration,
   seek: state => state.seek,
-  playing: state => state.playing,
+  //play: state => state.play,
 }
 const mutations =  {
   ['SET_VOLUME'](state, volume) {
@@ -54,13 +54,11 @@ const mutations =  {
   ['UNSET_PLAYER_ACTIVE'](state) {
     state.playerActive = false
   },
- ['CLOSE_PLAYER'](state) {
-    state.playerActive = false
+ ['UNSET_PLAYLIST'](state) {
     state.position = 0
     state.place = null
     state.tracks = []
     state.track = {}
-
   },
   ['SET_TRACKS'](state, tracks) {
     state.tracks = tracks
@@ -103,7 +101,10 @@ const mutations =  {
   },
   ['UNSET_PAUSE'](state) {
     state.pause = false
-  },
+  },/* 
+  ['SET_PLAY'] (state, play) {
+    state.play = play 
+  }, */
   ['SET_DURATION'](state, duration) {
     state.duration = duration
   },

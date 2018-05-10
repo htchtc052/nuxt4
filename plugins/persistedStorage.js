@@ -7,7 +7,7 @@ export default ({
     key: 'vuex',
     reducer: (state, paths) => {
       return {
-        playlist: {
+       /*  playlist: {
           position: state.playlist.position,
           place: state.playlist.place,
           tracks: state.playlist.tracks,
@@ -16,7 +16,7 @@ export default ({
           repeat: state.playlist.repeat,
           volume: state.playlist.volume,
 
-        }
+        } */
       }
     },
   })(store)

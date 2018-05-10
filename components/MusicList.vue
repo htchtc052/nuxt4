@@ -41,16 +41,15 @@ export default {
     ...mapGetters(["isNewPlaylist"])
   },
   methods: {
-    handlePlayPause: function(index, nowActive) {
-      console.log("handlePlayPause", "index", index, "nowActive", nowActive);
+    handlePlayPause: function(index, isCurrent) {
+      console.log("handlePlayPause", "index", index, "isCurrent", isCurrent)
       
-      if (nowActive) {
-        
+      if (isCurrent) {
         if (this.pause) {
-          this.$player.play();
+         // this.$player.play();
           this.$store.commit("playlist/UNSET_PAUSE");
         } else {
-          this.$player.pause();
+         // this.$player.pause();
           this.$store.commit("playlist/SET_PAUSE");
         }
       } else {
@@ -67,14 +66,15 @@ export default {
         this.setPosition(index);
         this.setPlace(this.$props.place);
 
-        //console.log(222, this.$player)
-        this.$createPlayer()
-        //console.log(222, this.$player)
-        this.$player.play()
+        //this.$createPlayer()
+        //this.$player.play()
+        
         if (this.$store.getters["playlist/pause"]) {
           this.$store.commit("playlist/UNSET_PAUSE")
         }
+        
         this.$store.commit("playlist/SET_PLAYER_ACTIVE")
+        //this.$store.commit("playlist/SET_PLAY", true)
       }
     },
     ...mapActions(["setTracks", "setTrack", "setPosition", "setPlace"])

@@ -1,6 +1,6 @@
 <template>
 <div>
-   <div id="player" class="player"  v-if="this.playerInstanse ? true : false ">
+   <div id="player" class="player"  v-if="this.playerActiveComputed ? true : false ">
         <div @click="skipTo" class="player__progress position-relative">
             <div class="progress rounded-0 pointer">
                 <div class="progress-bar bg-orange" role="progressbar" :style="'width: ' + this.progress  + '%'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -21,7 +21,9 @@
                         <span @click="prevClick()" class="icon-control-rewind icons"></span>
                     </span>
                     <span class="pointer p-2 t-21 ml-1">
-                          <span class="icons" v-bind:class="{ 'icon-control-pause': !pause, 'icon-control-play': pause }" @click="pause ? unsetPause() : setPause()"></span>
+                          <span class="icons"
+                           v-bind:class="{ 'icon-control-pause': !pause, 'icon-control-play': pause }"
+                           @click="pause ? pauseClick(false) : pauseClick(true)"></span>
                     </span>
                     <span class="pointer p-2 t-18" v-if="!(isLast && !repeat)">
                         <span @click="nextClick()" class="icon-control-forward icons"></span>
@@ -78,7 +80,7 @@
 <script>
 import Vue from "vue";
 import clamp from "math-clamp";
-import { Howler } from "howler";
+import {   Howl, Howler } from "howler";
 import { createNamespacedHelpers } from "vuex";
 const {
   mapState,
@@ -90,90 +92,202 @@ const {
 export default {
   data: () => {
     return {
-      start: Date.now(),
-      now: Date.now(),
       seek: 0,
-      // progress: 0,
-      timerId: null
+      duration: 0,
+      playerInstance: null,
+      timerId: null,
+      nowPlaying: false,
     };
   },
   watch: {
-    playing: function(playing) {
-      console.log("watch", playing, "timerId", this.timerId);
+    nowPlaying: function(nowPlaying) {
+      console.log("watch", nowPlaying, "timerId", this.timerId);
 
-      if (playing) {
+      if (nowPlaying) {
         // Start the seek poll
         this.timerId = setInterval(() => {
-          this.seek = this.$player.seek() || 0;
-        //  console.log(this.seek, this.progress, this.duration);
+          this.seek = this.playerInstance.seek() || 0;
+          console.log("in timer", this.seek, this.progress, this.duration);
         }, 250);
       } else {
         // Stop the seek poll
         clearInterval(this.timerId);
       }
+    },
+   /*  playerActiveComputed: function(playerActiveComputed) {
+      console.log("playerActiveComputed", playerActiveComputed)
+      if (playerActiveComputed) {
+        this.startPlayer()
+      }
+     }, */
+    track: function(newTrack, oldTrack) {
+        console.log("newTrack", newTrack.id, newTrack.title, "oldTrakc", oldTrack.id, oldTrack.title)
+      if (newTrack.id) {
+        console.log("NEWTRACK")
+        if (this.playerInstance) {
+          console.log("need unload player")
+          this.unloadPlayerInstance()
+        }
+        this.startPlayer()
+      }
+    },
+    pauseComputed: function(pause) {
+        console.log("watch pause", pause)
+        if (pause) {
+          this.playerInstance.pause()
+        } else {
+          this.playerInstance.play()
+        }
     }
+
   },
   mounted() {},
   computed: {
-    duration() {
-      return this.$store.getters["playlist/duration"] || 0;
+    pauseComputed() {
+      return this.$store.getters["playlist/pause"]
     },
     progress() {
-      console.log("progress()", this.seek, this.duration)      
-      if (this.duration === 0) return 0;
-      return this.seek / this.duration * 100;
+      //console.log("progress()", this.seek, this.duration)      
+      if (this.duration === 0) return 0
+
+      return this.seek / this.duration * 100
     },
-    playing() {
-      return this.$store.getters["playlist/playing"];
-    },
+    //nowPlayingActive() {
+     // return this.nowPlaying;
+   // }
+   //,
     ...mapGetters(["isFirst", "isLast", "volume"]),
-    ...mapState(["playerActive", "track", "repeat", "shuffle", "pause"]),
-    playerInstanse() {
-      return this.playerActive ? this.$player : null;
+    ...mapState(["repeat", "shuffle", "pause"]),
+    playerActiveComputed() {
+      return this.$store.getters["playlist/playerActive"]
+    },
+    track() {
+      return this.$store.getters["playlist/track"]
     }
+    /* playerActive() {
+      return this.playerActive ? this.$player : null;
+    } */
   },
   methods: {
+    createPlayerInstance: function() {
+    const track = this.$store.getters["playlist/track"].file
+
+    const self = this
+
+    const player = new Howl({
+        src: [track],
+        html5: true,
+        autoplay: false,
+        preload: false
+    })
+
+
+      const volume = this.volume || 1
+     // console.log("volume111", this.volume, volume)
+      player.volume(volume)
+      
+      console.log(player)
+   
+      player.on('end', function (selected) {
+         this.nowPlaying = false
+        console.log("on end")
+        if (this.$store.getters['playlist/repeat'] || !this.$store.getters["playlist/isLast"]) {
+          console.log("auto next")
+          this.$store.dispatch('playlist/next')
+          this.createPlayer()
+          this.playerInstance.play()
+        } else {
+          this.playerInstance.seek(0)
+          this.$store.commit('playlist/SET_PAUSE')
+        } 
+      })
+
+   
+      player.on('load', function (cb) {
+        //this.duration = player.duration()
+        //console.log("dur", cb, player.duration())
+        self.duration = player.duration()
+        console.log("on load", self.duration)
+      })
+
+      player.on('play', function () {
+        self.nowPlaying = true
+        console.log("on play")
+      })
+
+      player.on('pause', function () {
+        // window.clearInterval(this.$playerTimer)
+        self.nowPlaying = false
+        console.log("on pause")
+      })
+
+      player.on('stop', function () {
+        self.nowPlaying = false
+        console.log("on stop")
+      })
+
+      if (self.playerInstance) {
+        console.log("createPlayer self.playerInstance exists")
+        self.unloadPlayerInstance()
+      }
+
+      self.playerInstance = player
+      console.log("createPlayerInstance end ", self.playerInstance)
+   },
+
     prevClick: function() {
-      this.$store.dispatch("playlist/prev");
-      this.$createPlayer();
-      this.restorePlayPause();
+      //this.unloadPlayerInstance()
+      this.$store.dispatch("playlist/prev")
+      //this.startPlayer()
     },
     nextClick: function() {
-      this.$store.dispatch("playlist/next");
-      this.$createPlayer();
-      this.restorePlayPause();
-    },
-    restorePlayPause: function() {
-      if (this.$store.getters["playlist/pause"]) {
-        this.$player.pause();
-      } else {
-        this.$player.play();
-      }
+    //  this.unloadPlayerInstance()
+      this.$store.dispatch("playlist/next")
+      //this.startPlayer()
+    }, 
+    pauseClick: function(val) {
+      if (val) 
+        this.$store.commit('playlist/SET_PAUSE')
+      else 
+        this.$store.commit('playlist/UNSET_PAUSE')
     },
     skipTo: function(params) {
       const seekTo =
         params.offsetX /
         params.srcElement.parentElement.clientWidth *
         this.duration;
-      console.log("seekTo", seekTo);
+      console.log("seekTo", seekTo, "playerInstance", this.playerInstance, "duration", this.duration);
       const seek = clamp(seekTo, 0, this.duration)
-      this.$player.seek(seek);
+      this.playerInstance.seek(seek);
       this.seek = seek
     },
     setPause: function() {
       this.$store.commit("playlist/SET_PAUSE");
-      this.$player.pause();
+      this.playerInstance.pause()
     },
     unsetPause: function() {
       this.$store.commit("playlist/UNSET_PAUSE");
-      this.$player.play();
+      this.playerInstance.play()
+    },
+    unloadPlayerInstance: function() {
+      console.log("player instance unload")
+      this.nowPlaying = false
+      this.seek = 0
+      this.playerInstance.unload()
+      this.playerInstance = null
     },
     closePlayer: function() {
-      clearInterval(this.timerId);
-      console.log(this);
-      this.$closePlayer();
-      this.$store.commit("playlist/SET_PLAYING", false);
-      this.$store.commit("playlist/CLOSE_PLAYER");
+      console.log("close player", "timerId", this.timerId, "player", this.playerInstance)
+      clearInterval(this.timerId)
+      this.unloadPlayerInstance()
+      this.$store.commit("playlist/UNSET_PLAYER_ACTIVE");
+      this.$store.commit("playlist/UNSET_PLAYLIST");
+    },
+    startPlayer: function() {
+        this.createPlayerInstance()
+        if (this.pause) 
+          this.playerInstance.pause()
+        else this.playerInstance.play()
     },
     volumeUpDown: function(type) {
       if (type == "down") {
@@ -183,8 +297,8 @@ export default {
       }
       if (new_volume > 1) new_volume = 1;
       if (new_volume < 0) new_volume = 0;
-      console.log(3333, Howler, new_volume);
-      this.$player.volume(new_volume);
+      console.log("volemeUpDown", new_volume);
+      this.playerInstance.volume(new_volume);
       this.$store.commit("playlist/SET_VOLUME", new_volume);
     },
     ...mapMutations(["TOGGLE_REPEAT", "TOGGLE_SHUFFLE"])
