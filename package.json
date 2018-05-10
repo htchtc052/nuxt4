@@ -16,6 +16,7 @@
     "@nuxtjs/bootstrap-vue": "^2.0.4",
     "axios": "^0.17.1",
     "bootstrap": "^4.0.0",
+    "howler": "^2.0.10",
     "jquery": "^3.3.1",
     "node-sass": "^4.8.3",
     "npm": "^5.8.0",

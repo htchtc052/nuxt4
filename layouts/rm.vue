@@ -13,9 +13,10 @@
     <TopBanners></TopBanners>
 
     <nuxt/>
- 
+
+    <no-ssr>
     <Player></Player>
-    
+    </no-ssr>
     <Footer></Footer>
 
   </div>

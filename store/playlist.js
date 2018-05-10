@@ -13,6 +13,9 @@ const state = () => ({
   repeat: false,
   shuffle: false,
   pause: false,
+  duration: 0,
+  seek: 0,
+  playing: false,
 })
 
 const getters = {
@@ -36,7 +39,10 @@ const getters = {
   playerActive: state => state.playerActive,
   volume: state => state.volume,
   repeat: state => state.repeat,
-  shuffle: state => state.shuffle
+  shuffle: state => state.shuffle,
+  duration: state => state.duration,
+  seek: state => state.seek,
+  playing: state => state.playing,
 }
 const mutations =  {
   ['SET_VOLUME'](state, volume) {
@@ -97,6 +103,15 @@ const mutations =  {
   },
   ['UNSET_PAUSE'](state) {
     state.pause = false
+  },
+  ['SET_DURATION'](state, duration) {
+    state.duration = duration
+  },
+  ['SET_SEEK'](state, seek) {
+    state.seek = seek
+  },
+  ['SET_PLAYING'](state, playing) {
+    state.playing = playing
   },
 }
 const actions = {

@@ -1,15 +1,16 @@
 <template>
 <div>
-   <div id="player" class="player"  v-if="this.player ? true : false">
+   <div id="player" class="player"  v-if="this.playerInstanse ? true : false ">
         <div @click="skipTo" class="player__progress position-relative">
             <div class="progress rounded-0 pointer">
-                <div class="progress-bar bg-orange" role="progressbar" :style="'width: ' + (this.player.progress * 100) + '%'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-orange" role="progressbar" :style="'width: ' + this.progress  + '%'" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
+         
             <div class="d-flex justify-content-between px-1">
-                <span class="t-10">{{ this.player.seek }}</span>
-                <span class="t-10">{{ this.player.duration }}</span>
-            </div>
-        </div>
+         <!--        <span class="t-10">{{ this.seek }}</span>
+                <span class="t-10">{{ this.duration }}</span> -->
+            </div> 
+         </div>
         <div class="wrap position-relative">
             <div class="player__toogle pointer">
                 <span class="icon-arrow-down icons t-12" @click="closePlayer()"></span>
@@ -76,25 +77,58 @@
 
 <script>
 import Vue from "vue";
+import clamp from "math-clamp";
+import { Howler } from "howler";
 import { createNamespacedHelpers } from "vuex";
-const { mapState, mapGetters, mapActions, mapMutations } = createNamespacedHelpers(
-  "playlist"
-);
+const {
+  mapState,
+  mapGetters,
+  mapActions,
+  mapMutations
+} = createNamespacedHelpers("playlist");
 
 export default {
   data: () => {
-    return {};
+    return {
+      start: Date.now(),
+      now: Date.now(),
+      seek: 0,
+      // progress: 0,
+      timerId: null
+    };
   },
+  watch: {
+    playing: function(playing) {
+      console.log("watch", playing, "timerId", this.timerId);
+
+      if (playing) {
+        // Start the seek poll
+        this.timerId = setInterval(() => {
+          this.seek = this.$player.seek() || 0;
+        //  console.log(this.seek, this.progress, this.duration);
+        }, 250);
+      } else {
+        // Stop the seek poll
+        clearInterval(this.timerId);
+      }
+    }
+  },
+  mounted() {},
   computed: {
+    duration() {
+      return this.$store.getters["playlist/duration"] || 0;
+    },
+    progress() {
+      console.log("progress()", this.seek, this.duration)      
+      if (this.duration === 0) return 0;
+      return this.seek / this.duration * 100;
+    },
+    playing() {
+      return this.$store.getters["playlist/playing"];
+    },
     ...mapGetters(["isFirst", "isLast", "volume"]),
-    ...mapState([
-      "playerActive",
-      "track",
-      "repeat",
-      "shuffle",
-      "pause"
-    ]),
-    player() {
+    ...mapState(["playerActive", "track", "repeat", "shuffle", "pause"]),
+    playerInstanse() {
       return this.playerActive ? this.$player : null;
     }
   },
@@ -117,43 +151,45 @@ export default {
       }
     },
     skipTo: function(params) {
-      this.player.setSeek(
+      const seekTo =
         params.offsetX /
-          params.srcElement.parentElement.clientWidth *
-          this.player.duration
-      );
+        params.srcElement.parentElement.clientWidth *
+        this.duration;
+      console.log("seekTo", seekTo);
+      const seek = clamp(seekTo, 0, this.duration)
+      this.$player.seek(seek);
+      this.seek = seek
     },
     setPause: function() {
       this.$store.commit("playlist/SET_PAUSE");
-      this.player.pause();
+      this.$player.pause();
     },
     unsetPause: function() {
       this.$store.commit("playlist/UNSET_PAUSE");
-      this.player.play();
+      this.$player.play();
     },
     closePlayer: function() {
-      this.$player.$destroy();
-      this.$player = null;
+      clearInterval(this.timerId);
+      console.log(this);
+      this.$closePlayer();
+      this.$store.commit("playlist/SET_PLAYING", false);
       this.$store.commit("playlist/CLOSE_PLAYER");
     },
     volumeUpDown: function(type) {
+      if (type == "down") {
+        var new_volume = (Math.round(this.$player.volume() * 100) - 10) / 100;
+      } else {
+        var new_volume = (Math.round(this.$player.volume() * 100) + 10) / 100;
+      }
       if (new_volume > 1) new_volume = 1;
       if (new_volume < 0) new_volume = 0;
-
-      if (type == "down") {
-        var new_volume = (Math.round(this.$player.volume * 100) - 10) / 100;
-      } else {
-        var new_volume = (Math.round(this.$player.volume * 100) + 10) / 100;
-      }
-
-      this.$player.setVolume(new_volume);
+      console.log(3333, Howler, new_volume);
+      this.$player.volume(new_volume);
       this.$store.commit("playlist/SET_VOLUME", new_volume);
     },
     ...mapMutations(["TOGGLE_REPEAT", "TOGGLE_SHUFFLE"])
   },
-  mounted: function() {
-    
-  }
+  ready: function() {}
 };
 </script>
 

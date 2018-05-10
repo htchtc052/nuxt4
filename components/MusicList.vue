@@ -45,7 +45,6 @@ export default {
       console.log("handlePlayPause", "index", index, "nowActive", nowActive);
       
       if (nowActive) {
-        if (!this.$player) return
         
         if (this.pause) {
           this.$player.play();
@@ -72,6 +71,9 @@ export default {
         this.$createPlayer()
         //console.log(222, this.$player)
         this.$player.play()
+        if (this.$store.getters["playlist/pause"]) {
+          this.$store.commit("playlist/UNSET_PAUSE")
+        }
         this.$store.commit("playlist/SET_PLAYER_ACTIVE")
       }
     },
