@@ -39,6 +39,7 @@ export default {
     ...mapGetters(["isNewPlaylist", "repeat", "shuffle", "pause"])
   },
   methods: {
+    //спрятать в store или хелпер для удобного запуска из разных мест
     handlePlayPause: function(index, isCurrent) {
       console.log("handlePlayPause", "index", index, "isCurrent", isCurrent);
       if (isCurrent) {

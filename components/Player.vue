@@ -138,7 +138,10 @@ export default {
       }
     }
   },
-  mounted() {},
+  mounted() {
+    console.log("mounted", this.track.id ? true: false)
+    this.track.id ? this.SET_PAUSE(true) : {}
+  },
   computed: {
     progress() {
       //console.log("progress()", this.seek, this.duration)

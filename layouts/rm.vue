@@ -49,17 +49,11 @@ export default {
     TopBanners
   },
   computed: {
-    ...mapGetters(["track"])
   },
   mounted: function() {
-    if (this.track) {
-      console.log("need_restore");
-      //this.SET_TRACK(this.track); //for watcher work
-      //this.SET_PAUSE(true);
-    }
+   
   },
   methods: {
-    ...mapMutations(["SET_PAUSE"])
   }
 };
 </script>
