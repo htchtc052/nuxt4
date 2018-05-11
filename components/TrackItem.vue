@@ -22,48 +22,61 @@
 </template>
 
 <script>
-
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters, mapActions } = createNamespacedHelpers('playlist')
+import { createNamespacedHelpers } from "vuex";
+const { mapGetters, mapActions } = createNamespacedHelpers("playlist");
 
 export default {
   props: {
     track: {
       type: Object,
-      required: true,
+      required: true
     },
     currentPlace: {
-        type: String,
-        required: true,
-    }, 
+      type: String,
+      required: true
+    },
     currentPosition: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: true
     }
   },
   computed: {
-     ...mapState([
-       'position',
-       'place',
-       'pause'
-    ]),
+    ...mapGetters(["position", "place", "pause"]),
     nowPlaying() {
-        return (this.nowActive && !this.pause) ? true : false
+      return this.nowActive && !this.pause ? true : false;
     },
     nowActive() {
-        return (this.position == this.currentPosition && this.place == this.currentPlace) ? true : false
+      return this.position == this.currentPosition &&
+        this.place == this.currentPlace
+        ? true
+        : false;
     }
   },
   mounted: function() {
-      //console.log("nowPlaying",  this.nowPlaying, "nowActive", this.nowActive)
   }
-}
+};
 </script>
 
 
 <style>
-.track-play {position: relative}
-.track-play .fas {position: absolute; color: #fff;background-color: #ee8803;border-radius: 100%;width: 28px;height: 28px;text-align: center;top:calc(50% - 14px);
-left:calc(50% - 14px); line-height: 28px;font-size: 12px;visibility: hidden;}
-.track-play:hover .fas {visibility: visible;}
+.track-play {
+  position: relative;
+}
+.track-play .fas {
+  position: absolute;
+  color: #fff;
+  background-color: #ee8803;
+  border-radius: 100%;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  top: calc(50% - 14px);
+  left: calc(50% - 14px);
+  line-height: 28px;
+  font-size: 12px;
+  visibility: hidden;
+}
+.track-play:hover .fas {
+  visibility: visible;
+}
 </style>

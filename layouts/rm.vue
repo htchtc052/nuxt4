@@ -24,17 +24,22 @@
 </template>
 
 <script>
-import Vue from "vue"
+import Vue from "vue";
 import Logo from "~/components/Logo.vue";
 import UserMenu from "~/components/UserMenu.vue";
 import MainMenu from "~/components/MainMenu.vue";
 import TopBanners from "~/components/TopBanners.vue";
 import Footer from "~/components/Footer.vue";
 import Player from "~/components/Player.vue";
-import commonHelper from "~/plugins/commonHelper";
-
+import { createNamespacedHelpers } from "vuex";
+const { mapGetters, mapActions, mapMutations } = createNamespacedHelpers(
+  "playlist"
+);
 
 export default {
+  data: function() {
+    return {};
+  },
   components: {
     Footer,
     Player,
@@ -43,21 +48,18 @@ export default {
     MainMenu,
     TopBanners
   },
- computed: {
-    
- }, 
+  computed: {
+    ...mapGetters(["track"])
+  },
   mounted: function() {
-
-    if (this.$store.getters["playlist/track"] && this.$store.getters["playlist/tracksSize"]) {
-      console.log("need_restore")
-      this.$createPlayer()
-      this.$player.pause()
-      this.$store.commit("playlist/SET_PAUSE")
-      this.$store.commit("playlist/SET_PLAYER_ACTIVE")
+    if (this.track) {
+      console.log("need_restore");
+      //this.SET_TRACK(this.track); //for watcher work
+      //this.SET_PAUSE(true);
     }
   },
-  data: function() {
-    return {};
+  methods: {
+    ...mapMutations(["SET_PAUSE"])
   }
 };
 </script>

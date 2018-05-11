@@ -9,11 +9,9 @@ const state = () => ({
   place: null,
   tracks: [],
   track: {},
-  playerActive: false,
   repeat: false,
   shuffle: false,
   pause: false,
- // play: false,
   duration: 0,
   seek: 0,
 })
@@ -36,15 +34,16 @@ const getters = {
     return !(place == state.place && state.tracks.length)
   },
   pause: state => state.pause,
-  playerActive: state => state.playerActive,
   volume: state => state.volume,
   repeat: state => state.repeat,
   shuffle: state => state.shuffle,
   duration: state => state.duration,
   seek: state => state.seek,
-  //play: state => state.play,
 }
 const mutations =  {
+  ['SET_PAUSE'](state, value) {
+    state.pause = value
+  },
   ['SET_VOLUME'](state, volume) {
     state.volume = volume
   },
@@ -72,10 +71,6 @@ const mutations =  {
   ['SET_PLACE'](state, place) {
     state.place = place
   },
-  ['UNSET_PLAYER'](state) {
-    state.player.$destroy();
-    state.player = null
-  },
   ['TOGGLE_REPEAT'](state) {
       state.repeat = !state.repeat
   },
@@ -96,24 +91,8 @@ const mutations =  {
       state.position = state.track.position
     }
   },
-  ['SET_PAUSE'](state) {
-    state.pause = true
-  },
-  ['UNSET_PAUSE'](state) {
-    state.pause = false
-  },/* 
-  ['SET_PLAY'] (state, play) {
-    state.play = play 
-  }, */
-  ['SET_DURATION'](state, duration) {
-    state.duration = duration
-  },
-  ['SET_SEEK'](state, seek) {
-    state.seek = seek
-  },
-  ['SET_PLAYING'](state, playing) {
-    state.playing = playing
-  },
+ 
+
 }
 const actions = {
   prev({commit, state, getters}) {
@@ -184,18 +163,6 @@ const actions = {
         //console.log("@@@@ next  tracks", state.tracks, "track", state.track.title, "position", state.position)
       }
     }
-  },
-  setTracks({ commit }, tracks) {
-    commit('SET_TRACKS', tracks)
-  },
-  setTrack({ commit }, track) {
-    commit('SET_TRACK', track)
-  },
-  setPosition({ commit }, position) {
-    commit('SET_POSITION', position)
-  },
-  setPlace({ commit }, place) {
-    commit('SET_PLACE', place)
   },
 
 }

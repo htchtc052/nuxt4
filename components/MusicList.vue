@@ -15,9 +15,8 @@
 import Vue from "vue";
 import TrackItem from "~/components/TrackItem.vue";
 import tracksHelper from "~/plugins/tracksHelper";
-//import playerHelper from "~/plugins/playerHelper";
 import { createNamespacedHelpers } from "vuex";
-const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
+const { mapGetters, mapActions, mapMutations } = createNamespacedHelpers(
   "playlist"
 );
 
@@ -37,47 +36,44 @@ export default {
     }
   },
   computed: {
-    ...mapState(["repeat", "shuffle", "pause"]),
-    ...mapGetters(["isNewPlaylist"])
+    ...mapGetters(["isNewPlaylist", "repeat", "shuffle", "pause"])
   },
   methods: {
     handlePlayPause: function(index, isCurrent) {
-      console.log("handlePlayPause", "index", index, "isCurrent", isCurrent)
-      
+      console.log("handlePlayPause", "index", index, "isCurrent", isCurrent);
       if (isCurrent) {
         if (this.pause) {
-         // this.$player.play();
-          this.$store.commit("playlist/UNSET_PAUSE");
+          this.SET_PAUSE(false);
         } else {
-         // this.$player.pause();
-          this.$store.commit("playlist/SET_PAUSE");
+          this.SET_PAUSE(true);
         }
       } else {
-        const track = this.$props.tracks[index];
-
-        this.setTrack(track);
         // ставим треки если новый плейлист
         if (this.isNewPlaylist(this.$props.place)) {
           const mapedTracks = tracksHelper.mapTracksPosition(
             this.$props.tracks
           );
-          this.setTracks(mapedTracks);
+          this.SET_TRACKS(mapedTracks);
         }
-        this.setPosition(index);
-        this.setPlace(this.$props.place);
+        this.SET_POSITION(index);
+        this.SET_PLACE(this.$props.place);
 
-        //this.$createPlayer()
-        //this.$player.play()
-        
-        if (this.$store.getters["playlist/pause"]) {
-          this.$store.commit("playlist/UNSET_PAUSE")
+        if (this.pause) {
+          this.SET_PAUSE(false);
         }
-        
-        this.$store.commit("playlist/SET_PLAYER_ACTIVE")
-        //this.$store.commit("playlist/SET_PLAY", true)
+
+        const track = this.$props.tracks[index];
+        this.SET_TRACK(track);
       }
     },
-    ...mapActions(["setTracks", "setTrack", "setPosition", "setPlace"])
+    ...mapMutations([
+      "SET_PAUSE",
+      "SET_PLACE",
+      "SET_POSITION",
+      "SET_TRACK",
+      "SET_TRACKS",
+      "SET_PLAYER_ACTIVE"
+    ])
   },
   data: function() {
     return {};

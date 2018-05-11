@@ -34,5 +34,11 @@ export default {
       track.page_id +
       ".jpg&w=36&h=36" : null
   },
+  formatTime: (secs) => {
+    var minutes = Math.floor(secs / 60) || 0;
+    var seconds = (secs - minutes * 60) || 0;
+
+    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+  }
 
 }
