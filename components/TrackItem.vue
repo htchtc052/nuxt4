@@ -1,6 +1,6 @@
 <template>
 <li class="d-flex border-bottom p-3">
-    <a href="#" class="track-play" @click.prevent="$emit('handlePlayPause', currentPosition, nowActive)">
+    <a href="#" class="track-play" @click.prevent="$emit('handlePlayPause', currentIndex, nowActive)">
             <span :class="{'fas fa-play' : !nowPlaying, 'fas fa-pause' : nowPlaying}"></span>
             <img class="rounded" :src="'https://www.realmusic.ru/img.php?src=/media/bandimg/' + (track.page_id % 10) + '/' + track.page_id + '.jpg&w=60&h=60'" />
         </a>
@@ -35,25 +35,26 @@ export default {
       type: String,
       required: true
     },
-    currentPosition: {
+    currentIndex: {
       type: Number,
       required: true
     }
   },
   computed: {
-    ...mapGetters(["position", "place", "pause"]),
+    ...mapGetters(["place", "pause"]),
+    playingTrack() {
+        return this.$store.getters["playlist/track"] 
+    },
     nowPlaying() {
       return this.nowActive && !this.pause ? true : false;
     },
     nowActive() {
-      return this.position == this.currentPosition &&
-        this.place == this.currentPlace
-        ? true
-        : false;
-    }
+      if (this.playingTrack.position == this.currentIndex && this.place == this.currentPlace)
+        return true;
+      else return false;
+    },
   },
-  mounted: function() {
-  }
+  mounted: function() {}
 };
 </script>
 

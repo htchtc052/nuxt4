@@ -44,6 +44,9 @@ const mutations =  {
   ['SET_PAUSE'](state, value) {
     state.pause = value
   },
+  ['TOOGLE_PAUSE'](state) {
+    state.pause = !state.pause
+  },
   ['SET_VOLUME'](state, volume) {
     state.volume = volume
   },
@@ -74,19 +77,25 @@ const mutations =  {
   ['TOGGLE_REPEAT'](state) {
       state.repeat = !state.repeat
   },
-  ['TOGGLE_SHUFFLE'](state, getters) {
+  ['TOGGLE_SHUFFLE'](state) {
     state.shuffle = !state.shuffle
     if (state.shuffle) {
+      console.log("begin toogle shuffle")
+      state.position = 0
       let tracks = state.tracks
       tracks = _.shuffle(tracks)
+  
+
+      //tracks = _.shuffle(tracks);
+      const newIndex = tracksHelper.getKeyByPositionForTrack(
+        tracks,
+        state.track.position
+      );
+      tracksHelper.moveTrackByIndex(tracks, newIndex, 0);
       state.tracks = tracks
-      //move current track to first position after shuffle
-      const index = tracksHelper.getKeyByPositionForTrack(tracks, state.position)
-      console.log("before moveTrackByIndex", "tracks.length", tracks.length, "position", state.position, "index", index)
-      console.log("track before move", tracks[index].title);
-      tracksHelper.moveTrackByIndex(tracks, index, 0)
-      console.log("track before move", tracks[0].title);
-      state.position = 0
+      
+      console.log("setted tracks", state.tracks, "track", state.track.title);
+
     } else {
       state.position = state.track.position
     }
@@ -164,6 +173,47 @@ const actions = {
       }
     }
   },
+  startFromList({commit, state, getters }, { place, index, tracks}) {
+    console.log("startFromList", "place", place, "index", index, "tracks", tracks);
+    
+    if (state.track.position == index && state.place == place) {
+      commit('TOOGLE_PAUSE')
+    } else {
+      
+      let position;
+
+      let tracksList = tracksHelper.mapTracksPosition(tracks);
+
+      let track = tracksList[index];
+
+      console.log("click", track.title, track.position, state.shuffle);
+
+      if (state.shuffle) {
+        console.log("click and shuffle")
+        position = 0;
+        tracks = _.shuffle(tracks);
+        const newIndex = tracksHelper.getKeyByPositionForTrack(
+          tracks,
+          track.position
+        );
+        tracksHelper.moveTrackByIndex(tracks, newIndex, 0);
+      } else {
+        position = index;
+      }
+
+      commit('SET_TRACKS', tracks);
+      commit('SET_POSITION', position);
+
+      if (state.pause) {
+        commit('SET_PAUSE', false);
+      }
+      
+      commit('SET_PLACE', place); 
+      commit('SET_TRACK', track); 
+
+      console.log("setted tracks", getters.tracksTitlesList, "track", track);
+    }
+  }
 
 }
 

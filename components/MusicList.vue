@@ -5,7 +5,7 @@
             v-on:handlePlayPause="handlePlayPause"
             :key="index"
             :track="track"
-            :currentPosition="index"
+            :currentIndex="index"
             :currentPlace="place"
           ></li>
         </ul>
@@ -36,51 +36,23 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["isNewPlaylist", "repeat", "shuffle", "pause"])
+    ...mapGetters([
+      // "tracksTitlesList"
+    ])
   },
   methods: {
-    //спрятать в store или хелпер для удобного запуска из разных мест
     handlePlayPause: function(index, isCurrent) {
-      console.log("handlePlayPause", "index", index, "isCurrent", isCurrent);
-      if (isCurrent) {
-        if (this.pause) {
-          this.SET_PAUSE(false);
-        } else {
-          this.SET_PAUSE(true);
-        }
-      } else {
-        // ставим треки если новый плейлист
-        if (this.isNewPlaylist(this.$props.place)) {
-          const mapedTracks = tracksHelper.mapTracksPosition(
-            this.$props.tracks
-          );
-          this.SET_TRACKS(mapedTracks);
-        }
-        this.SET_POSITION(index);
-        this.SET_PLACE(this.$props.place);
-
-        if (this.pause) {
-          this.SET_PAUSE(false);
-        }
-
-        const track = this.$props.tracks[index];
-        this.SET_TRACK(track);
-      }
+      console.log(index, isCurrent)
+      this.startFromList({place:this.place, index:index, tracks: this.tracks});
     },
-    ...mapMutations([
-      "SET_PAUSE",
-      "SET_PLACE",
-      "SET_POSITION",
-      "SET_TRACK",
-      "SET_TRACKS",
-      "SET_PLAYER_ACTIVE"
-    ])
+
+    ...mapActions(["startFromList"])
   },
   data: function() {
     return {};
   },
   mounted: function() {
-    //const directOrderTracks = tracksHelper.mapTracksPosition(this.$props.tracks);
+    // this.tracksList = tracksHelper.mapTracksPosition(this.$props.tracks);
   }
 };
 </script>
