@@ -5,19 +5,15 @@ import tracksHelper from "~/plugins/tracksHelper"
 
 const state = () => ({
   volume: 1,
-  position: 0,
   place: null,
   tracks: [],
   track: {},
   repeat: false,
   shuffle: false,
   pause: false,
-  duration: 0,
-  seek: 0,
 })
 
 const getters = {
-  position: state => state.position,
   place: state => state.place,
   track: state => {
     if (!state.track.id) return {};
@@ -27,20 +23,34 @@ const getters = {
     return track;
   },
   tracksTitlesList: state => (state.tracks.length) ? tracksHelper.mapOnlyTracksTitles(state.tracks) : [],
-  tracksSize: state => state.tracks ? state.tracks.length : 0, 
-  isFirst: state => (state.position === 0) ? true : false,
-  isLast: state => (state.position >= state.tracks.length - 1) ? true : false,
-  isNewPlaylist:  state => (place) => {
+  tracksCurrentTitle: state => (state.track) ? state.track.title : null,
+  tracksSize: state => state.tracks ? state.tracks.length : 0,
+  isFirst: state => {
+    if (!state.shuffle) {
+      if (state.track.position == 0) return true
+    } else {
+      if (tracksHelper.getKeyByPositionForTrack(state.tracks, state.track.position) == 0) return true
+    }
+    return false
+  },
+  isLast: state => {
+    if (!state.shuffle) {
+      if (state.track.position >= (state.tracks.length -1)) return true
+    } else {
+      if (tracksHelper.getKeyByPositionForTrack(state.tracks, state.track.position) >= (state.tracks.length -1)) return true
+    }
+    return false
+  },
+  isNewPlaylist: state => (place) => {
     return !(place == state.place && state.tracks.length)
   },
   pause: state => state.pause,
   volume: state => state.volume,
   repeat: state => state.repeat,
   shuffle: state => state.shuffle,
-  duration: state => state.duration,
-  seek: state => state.seek,
+
 }
-const mutations =  {
+const mutations = {
   ['SET_PAUSE'](state, value) {
     state.pause = value
   },
@@ -56,7 +66,7 @@ const mutations =  {
   ['UNSET_PLAYER_ACTIVE'](state) {
     state.playerActive = false
   },
- ['UNSET_PLAYLIST'](state) {
+  ['UNSET_PLAYLIST'](state) {
     state.position = 0
     state.place = null
     state.tracks = []
@@ -75,111 +85,91 @@ const mutations =  {
     state.place = place
   },
   ['TOGGLE_REPEAT'](state) {
-      state.repeat = !state.repeat
+    state.repeat = !state.repeat
   },
   ['TOGGLE_SHUFFLE'](state) {
     state.shuffle = !state.shuffle
     if (state.shuffle) {
-      console.log("begin toogle shuffle")
-      state.position = 0
       let tracks = state.tracks
       tracks = _.shuffle(tracks)
-  
 
-      //tracks = _.shuffle(tracks);
-      const newIndex = tracksHelper.getKeyByPositionForTrack(
-        tracks,
-        state.track.position
-      );
-      tracksHelper.moveTrackByIndex(tracks, newIndex, 0);
+      if (!state.repeat) {
+        // что бы текущий трек всегда оказался в начале перемешенного списка и было куда далее играть
+        const newIndex = tracksHelper.getKeyByPositionForTrack(
+          tracks,
+          state.track.position
+        );
+        tracksHelper.moveTrackByIndex(tracks, newIndex, 0);
+      }
       state.tracks = tracks
-      
-      console.log("setted tracks", state.tracks, "track", state.track.title);
-
-    } else {
-      state.position = state.track.position
     }
   },
- 
-
 }
 const actions = {
-  prev({commit, state, getters}) {
-    console.log("action prev")
+  prev({
+    commit,
+    state,
+    getters
+  }) {
+    //console.log("action prev")
+    let track
     if (getters.isFirst) {
       if (!state.repeat) return;
-        if (state.shuffle) {
-          let tracks = state.tracks
-          tracksHelper.moveTrackByIndex(tracks, tracks.length - 1, 0)
-          commit('SET_TRACKS', tracks)
-          const track = state.tracks[state.position]
-          commit('SET_TRACK', track)
-            //console.log("@@@@ prev isFirst shuffle && repeat tracks", state.tracks, "track", state.track.title, "position", state.position)
-        } else {    
-          const  position = state.tracks.length - 1
-          const track = tracksHelper.getTrackByKey(state.tracks, position)
-          commit('SET_POSITION', position)
-          commit('SET_TRACK', track)
-          //console.log("@@@@ prev isFirst repeat tracks", tracks, "track", track.title, "position", position)
-        }
-      } else {
-      const position = state.position - 1
-      let track
       if (state.shuffle) {
-        track = state.tracks[position]
-        commit('SET_POSITION', position)
-        commit('SET_TRACK', track)
-        //console.log("@@@@ prev shuffle tracks", state.tracks, "track", state.track.title, "position", state.position)
+        track = state.tracks[state.tracks.length - 1]
       } else {
-        track = tracksHelper.getTrackByKey(state.tracks, position)
-        commit('SET_POSITION', position)
-        commit('SET_TRACK', track)
-        //console.log("@@@@ prev  tracks", state.tracks, "track", state.track.title, "position", state.position)
+        track = tracksHelper.getTrackByKey(state.tracks, state.tracks.length - 1)
+      }
+    } else {
+      if (state.shuffle) {
+        const newIndex = tracksHelper.getKeyByPositionForTrack(state.tracks, state.track.position) - 1
+        track = state.tracks[newIndex]
+      } else {
+        track = tracksHelper.getTrackByKey(state.tracks, state.track.position - 1)
       }
     }
-    
+    commit('SET_TRACK', track)
   },
-  next({commit, state, getters }) {
-    console.log("action next")
+  next({
+    commit,
+    state,
+    getters
+  }) {
+    //console.log("action next")
+    let track
     if (getters.isLast) {
       if (!state.repeat) return;
-        if (state.shuffle) {
-          let tracks = state.tracks
-          tracksHelper.moveTrackByIndex(tracks, 0, tracks.length - 1)
-          commit('SET_TRACKS', tracks)
-          const track = state.tracks[state.position]
-          commit('SET_TRACK', track)
-            //console.log("@@@@ next isLast shuffle && repeat tracks", state.tracks, "track", state.track.title, "position", state.position)
-        } else {    
-          const  position = 0
-          const track = tracksHelper.getTrackByKey(state.tracks, position)
-          commit('SET_POSITION', position)
-          commit('SET_TRACK', track)
-          //console.log("@@@@ next isLast repeat tracks", tracks, "track", track.title, "position", position)
-        }
-      } else {
-      const position = state.position + 1
-      let track
       if (state.shuffle) {
-        track = state.tracks[position]
-        commit('SET_POSITION', position)
+        track = state.tracks[0]
         commit('SET_TRACK', track)
-        //console.log("@@@@ next shuffle tracks", state.tracks, "track", state.track.title, "position", state.position)
       } else {
-        track = tracksHelper.getTrackByKey(state.tracks, position)
-        commit('SET_POSITION', position)
-        commit('SET_TRACK', track)
-        //console.log("@@@@ next  tracks", state.tracks, "track", state.track.title, "position", state.position)
+        track = tracksHelper.getTrackByKey(state.tracks, 0)
+      }
+    } else {
+      if (state.shuffle) {
+        const newIndex = tracksHelper.getKeyByPositionForTrack(state.tracks, state.track.position) + 1
+        track = state.tracks[newIndex]
+      } else {
+        track = tracksHelper.getTrackByKey(state.tracks, state.track.position + 1)
       }
     }
+    commit('SET_TRACK', track)
   },
-  startFromList({commit, state, getters }, { place, index, tracks}) {
+  startFromList({
+    commit,
+    state,
+    getters
+  }, {
+    place,
+    index,
+    tracks
+  }) {
     console.log("startFromList", "place", place, "index", index, "tracks", tracks);
-    
+
     if (state.track.position == index && state.place == place) {
       commit('TOOGLE_PAUSE')
     } else {
-      
+
       let position;
 
       let tracksList = tracksHelper.mapTracksPosition(tracks);
@@ -188,28 +178,25 @@ const actions = {
 
       console.log("click", track.title, track.position, state.shuffle);
 
-      if (state.shuffle) {
-        console.log("click and shuffle")
-        position = 0;
-        tracks = _.shuffle(tracks);
+      tracks = _.shuffle(tracks);
+
+      if (state.shuffle && !state.repeat) {
+        // что бы текущий трек всегда оказался в начале перемешенного списка и было куда далее играть
         const newIndex = tracksHelper.getKeyByPositionForTrack(
           tracks,
           track.position
         );
         tracksHelper.moveTrackByIndex(tracks, newIndex, 0);
-      } else {
-        position = index;
       }
 
       commit('SET_TRACKS', tracks);
-      commit('SET_POSITION', position);
 
       if (state.pause) {
         commit('SET_PAUSE', false);
       }
-      
-      commit('SET_PLACE', place); 
-      commit('SET_TRACK', track); 
+
+      commit('SET_PLACE', place);
+      commit('SET_TRACK', track);
 
       console.log("setted tracks", getters.tracksTitlesList, "track", track);
     }
@@ -217,11 +204,10 @@ const actions = {
 
 }
 
-export default
-{
+export default {
   namespaced: true,
-  state:  state,
+  state: state,
   actions: actions,
   getters: getters,
   mutations: mutations,
-} 
+}

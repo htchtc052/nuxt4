@@ -121,11 +121,11 @@ export default {
           "new " + newTrack.title + " old " + oldTrack
         );
         //if (newTrack.id) {
-          //console.log("found new track");
-          if (this.playerInstance) {
-            this.unloadPlayerInstance();
-          }
-          this.startPlayer();
+        //console.log("found new track");
+        if (this.playerInstance) {
+          this.unloadPlayerInstance();
+        }
+        this.startPlayer();
         //}
       }
     },
@@ -139,8 +139,8 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted", this.track.id ? true: false)
-    this.track.id ? this.SET_PAUSE(true) : {}
+    console.log("mounted", this.track.id ? true : false);
+    this.track.id ? this.SET_PAUSE(true) : {};
   },
   computed: {
     progress() {
@@ -199,26 +199,21 @@ export default {
 
       player.on("load", function(cb) {
         self.duration = player.duration();
-        console.log("on load", self.duration);
       });
 
       player.on("play", function() {
         self.nowPlaying = true;
-        console.log("on play");
       });
 
       player.on("pause", function() {
         self.nowPlaying = false;
-        console.log("on pause");
       });
 
       player.on("stop", function() {
         self.nowPlaying = false;
-        console.log("on stop");
       });
 
       if (self.playerInstance) {
-        console.log("createPlayer self.playerInstance exists");
         self.unloadPlayerInstance();
       }
 

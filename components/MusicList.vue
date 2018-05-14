@@ -2,7 +2,7 @@
     <div>
          <ul class="list-unstyled tracklist">
            <li is="TrackItem" v-for="(track, index) in tracks" 
-            v-on:handlePlayPause="handlePlayPause"
+            v-on:startFromList="startFromList"
             :key="index"
             :track="track"
             :currentIndex="index"
@@ -35,24 +35,21 @@ export default {
       type: String
     }
   },
-  computed: {
-    ...mapGetters([
-      // "tracksTitlesList"
-    ])
-  },
+  computed: {},
   methods: {
-    handlePlayPause: function(index, isCurrent) {
-      console.log(index, isCurrent)
-      this.startFromList({place:this.place, index:index, tracks: this.tracks});
+    startFromList: function(index) {
+      console.log("startFromList", index);
+      this.storeStartFromList({
+        place: this.place,
+        tracks: this.tracks,
+        index: index
+      });
     },
 
-    ...mapActions(["startFromList"])
+    ...mapActions({ storeStartFromList: 'startFromList'})
   },
   data: function() {
     return {};
-  },
-  mounted: function() {
-    // this.tracksList = tracksHelper.mapTracksPosition(this.$props.tracks);
   }
 };
 </script>

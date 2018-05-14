@@ -1,6 +1,6 @@
 <template>
 <li class="d-flex border-bottom p-3">
-    <a href="#" class="track-play" @click.prevent="$emit('handlePlayPause', currentIndex, nowActive)">
+    <a href="#" class="track-play" @click.prevent="$emit('startFromList', currentIndex)">
             <span :class="{'fas fa-play' : !nowPlaying, 'fas fa-pause' : nowPlaying}"></span>
             <img class="rounded" :src="'https://www.realmusic.ru/img.php?src=/media/bandimg/' + (track.page_id % 10) + '/' + track.page_id + '.jpg&w=60&h=60'" />
         </a>
