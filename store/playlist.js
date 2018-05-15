@@ -23,7 +23,7 @@ const getters = {
     return track;
   },
   tracksTitlesList: state => (state.tracks.length) ? tracksHelper.mapOnlyTracksTitles(state.tracks) : [],
-  tracksCurrentTitle: state => (state.track) ? state.track.title : null,
+  trackCurrentTitle: state => (state.track) ? state.track.title : null,
   tracksSize: state => state.tracks ? state.tracks.length : 0,
   isFirst: state => {
     if (!state.shuffle) {
@@ -41,14 +41,13 @@ const getters = {
     }
     return false
   },
-  isNewPlaylist: state => (place) => {
-    return !(place == state.place && state.tracks.length)
-  },
+  // isNewPlaylist: state => (place) => {
+  //   return !(place == state.place && state.tracks.length)
+  // },
   pause: state => state.pause,
   volume: state => state.volume,
   repeat: state => state.repeat,
   shuffle: state => state.shuffle,
-
 }
 const mutations = {
   ['SET_PAUSE'](state, value) {
@@ -59,13 +58,7 @@ const mutations = {
   },
   ['SET_VOLUME'](state, volume) {
     state.volume = volume
-  },
-  ['SET_PLAYER_ACTIVE'](state) {
-    state.playerActive = true
-  },
-  ['UNSET_PLAYER_ACTIVE'](state) {
-    state.playerActive = false
-  },
+   },
   ['UNSET_PLAYLIST'](state) {
     state.position = 0
     state.place = null
@@ -77,9 +70,6 @@ const mutations = {
   },
   ['SET_TRACK'](state, track) {
     state.track = track
-  },
-  ['SET_POSITION'](state, position) {
-    state.position = position
   },
   ['SET_PLACE'](state, place) {
     state.place = place
@@ -169,9 +159,6 @@ const actions = {
     if (state.track.position == index && state.place == place) {
       commit('TOOGLE_PAUSE')
     } else {
-
-      let position;
-
       let tracksList = tracksHelper.mapTracksPosition(tracks);
 
       let track = tracksList[index];
@@ -197,8 +184,6 @@ const actions = {
 
       commit('SET_PLACE', place);
       commit('SET_TRACK', track);
-
-      console.log("setted tracks", getters.tracksTitlesList, "track", track);
     }
   }
 

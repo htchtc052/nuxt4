@@ -46,7 +46,7 @@ export default {
       });
     },
 
-    ...mapActions({ storeStartFromList: 'startFromList'})
+    ...mapActions({ storeStartFromList: "startFromList" })
   },
   data: function() {
     return {};

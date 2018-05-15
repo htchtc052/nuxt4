@@ -8,7 +8,6 @@ export default ({
     reducer: (state, paths) => {
       return {
          playlist: {
-          position: state.playlist.position,
           place: state.playlist.place,
           tracks: state.playlist.tracks,
           track: state.playlist.track,

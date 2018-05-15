@@ -265,7 +265,7 @@ export default {
       // console.log( "close player","timerId",this.timerId,"player",this.playerInstance);
       clearInterval(this.timerId);
       this.unloadPlayerInstance();
-      this.UNSET_PLAYER_ACTIVE();
+      //this.UNSET_PLAYER_ACTIVE();
       this.UNSET_PLAYLIST();
     },
     startPlayer: function() {
