@@ -101,7 +101,6 @@ const actions = {
     state,
     getters
   }) {
-    //console.log("action prev")
     let track
     if (getters.isFirst) {
       if (!state.repeat) return;
@@ -125,7 +124,6 @@ const actions = {
     state,
     getters
   }) {
-    //console.log("action next")
     let track
     if (getters.isLast) {
       if (!state.repeat) return;
@@ -154,7 +152,7 @@ const actions = {
     index,
     tracks
   }) {
-    console.log("startFromList", "place", place, "index", index, "tracks", tracks);
+    //console.log("startFromList", "place", place, "index", index, "tracks", tracks);
 
     if (state.track.position == index && state.place == place) {
       commit('TOOGLE_PAUSE')
@@ -163,7 +161,7 @@ const actions = {
 
       let track = tracksList[index];
 
-      console.log("click", track.title, track.position, state.shuffle);
+      //console.log("click", track.title, track.position, state.shuffle);
 
       tracks = _.shuffle(tracks);
 

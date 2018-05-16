@@ -1,47 +1,73 @@
 <template>
   <div class="top-banner bg-light">
     <div class="d-flex">
-           <div is="TopBannerItem" 
+           <div
             v-for="(track, index) in tracks" 
-            v-on:startFromList="startFromList"
             :key="index"
             :track="track"
-            :currentIndex="index"
-            :currentPlace="place"
-            class="w-50 d-flex"
-          ></div>
-  
+            class="w-50 d-flex">
+           
+              <a href="#"  class="py-3 pl-3 m-1">
+                  <img class="rounded"
+                  :src="'https://www.realmusic.ru/img.php?src=/media/bandimg/' + (track.page_id % 10) + '/' + track.page_id + '.jpg&w=136&h=136'">
+              </a>
 
+                 <div class="py-3 m-1 w-100 pl-1 pr-3">
+                    <div class="d-flex align-items-start flex-column h-100">
+                    <div class="mb-auto w-100">
+                        <a href="#" class="float-right top-banner__get-pro">
+                        <span class="fas fa-question-circle"></span>
+                        </a>
 
-       
-    </div>
+                        <nuxt-link :to="{ name: 'pages-id', params: { id: track.page_id }}" class="font-weight-bold">{{ track.page_title }}</nuxt-link>
+            
+                        <div>
+                        <span v-if="track.page_country_id" :class="'flagcountry_' + track.page_country_id" ></span>
+                        </div>
+                    </div>
+                    <div class="font-italic mb-auto" v-text="track.page_descr"></div>
+                    <div>
+                        <div class="d-flex s-player align-items-center">
+                        <a href="#" @click.prevent="startFromList(index)" class="d-inline-block text-link-o p-2 s-player__btn text-center">
+                           <span :class="[ nowPlaying(index) ? 'fas fa-pause' : 'fas fa-play']"></span>
+                          </a>
+                        <div class="d-flex flex-column pl-2">
+                                <nuxt-link :to="{ name: 'pages-id', params: { id: track.page_id }}" class="font-weight-bold">{{ track.title }}</nuxt-link>
+            
+                            <small class="text-muted t-11">{{ track.genrename}}</small>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            </div>
+      </div>    
   </div>
 </template>
 
 <script>
 import Vue from "vue";
-import TopBannerItem from "~/components/TopBannerItem.vue";
-//import tracksHelper from "~/plugins/tracksHelper";
 import { createNamespacedHelpers } from "vuex";
 const { mapActions } = createNamespacedHelpers("playlist");
 
 export default {
-  components: {
-    TopBannerItem
-  },
   props: {},
   computed: {},
   methods: {
     startFromList: function(index) {
-      console.log("startFromList", index);
-      this.storeStartFromList({
+      this.$store.dispatch("playlist/startFromList", {
         place: this.place,
         tracks: this.tracks,
         index: index
       });
     },
-
-    ...mapActions({ storeStartFromList: "startFromList" })
+    nowPlaying: function(index) {
+      return this.$store.getters["playlist/track"].position == index &&
+        this.$store.getters["playlist/place"] == this.place &&
+        !this.$store.getters["playlist/pause"]
+        ? true
+        : false;
+    },
   },
   data: function() {
     return {
@@ -60,9 +86,10 @@ export default {
           id: 1412560,
           title: "Театр",
           genrename: "Бард-рок",
-          page_title: 'AVERRUNK',
+          page_title: "AVERRUNK",
           page_id: 182593,
-          page_descr: "Текст и музыка К. Николаев. Аранжировки К. Николаев, К. Кремнев. Барабаны Д. Афанасьев...",
+          page_descr:
+            "Текст и музыка К. Николаев. Аранжировки К. Николаев, К. Кремнев. Барабаны Д. Афанасьев...",
           page_country_id: "RU"
         }
       ]

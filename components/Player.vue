@@ -22,7 +22,7 @@
                     </span>
                     <span class="pointer p-2 t-21 ml-1">
                           <span class="icons"
-                           v-bind:class="{ 'icon-control-pause': !pause, 'icon-control-play': pause }"
+                           v-bind:class="[pause ? 'icon-control-play' : 'icon-control-pause']"
                            @click="pause ? pauseClick(false) : pauseClick(true)"></span>
                     </span>
                     <span class="pointer p-2 t-18" v-if="!(isLast && !repeat)">
@@ -83,12 +83,9 @@ import clamp from "math-clamp";
 import { Howl, Howler } from "howler";
 import { createNamespacedHelpers } from "vuex";
 import tracksHelper from "~/plugins/tracksHelper";
-const {
-  //mapState,
-  mapGetters,
-  mapActions,
-  mapMutations
-} = createNamespacedHelpers("playlist");
+const { mapGetters, mapActions, mapMutations } = createNamespacedHelpers(
+  "playlist"
+);
 
 export default {
   data: () => {
@@ -103,7 +100,6 @@ export default {
   watch: {
     nowPlaying: function(nowPlaying) {
       // console.log("watch nowPlaying", nowPlaying, "timerId", this.timerId);
-
       if (nowPlaying) {
         this.timerId = setInterval(() => {
           this.seek = this.playerInstance.seek() || 0;
@@ -116,21 +112,13 @@ export default {
     track: {
       immediate: true,
       handler(newTrack, oldTrack) {
-        console.log(
-          "Watch track",
-          "new " + newTrack.title + " old " + oldTrack
-        );
-        //if (newTrack.id) {
-        //console.log("found new track");
         if (this.playerInstance) {
           this.unloadPlayerInstance();
         }
         this.startPlayer();
-        //}
       }
     },
     pause: function(pause) {
-      console.log("watch pause", pause);
       if (pause) {
         this.playerInstance.pause();
       } else {
@@ -139,12 +127,11 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted", this.track.id ? true : false);
+    //console.log("mounted", this.track.id ? true : false);
     this.track.id ? this.SET_PAUSE(true) : {};
   },
   computed: {
     progress() {
-      //console.log("progress()", this.seek, this.duration)
       if (this.duration === 0) return 0;
       return this.seek / this.duration * 100;
     },
@@ -178,14 +165,11 @@ export default {
       });
 
       const volume = this.volume || 1;
-      // console.log("volume111", this.volume, volume)
       player.volume(volume);
-
-      //console.log(player)
 
       player.on("end", function(selected) {
         self.nowPlaying = false;
-        console.log("on end", "repeat", self.repeat, "isLast", self.isLast);
+        // console.log("on end", "repeat", self.repeat, "isLast", self.isLast);
         if (self.repeat || !self.isLast) {
           console.log("auto next");
           self.$store.dispatch("playlist/next");
@@ -234,14 +218,6 @@ export default {
         params.offsetX /
         params.srcElement.parentElement.clientWidth *
         this.duration;
-      console.log(
-        "seekTo",
-        seekTo,
-        "playerInstance",
-        this.playerInstance,
-        "duration",
-        this.duration
-      );
       const seek = clamp(seekTo, 0, this.duration);
       this.playerInstance.seek(seek);
       this.seek = seek;
@@ -255,7 +231,7 @@ export default {
       this.playerInstance.play();
     },
     unloadPlayerInstance: function() {
-      console.log("player instance unload");
+      //console.log("player instance unload");
       this.nowPlaying = false;
       this.seek = 0;
       this.playerInstance.unload();
@@ -265,7 +241,6 @@ export default {
       // console.log( "close player","timerId",this.timerId,"player",this.playerInstance);
       clearInterval(this.timerId);
       this.unloadPlayerInstance();
-      //this.UNSET_PLAYER_ACTIVE();
       this.UNSET_PLAYLIST();
     },
     startPlayer: function() {
@@ -286,7 +261,7 @@ export default {
       }
       if (new_volume > 1) new_volume = 1;
       if (new_volume < 0) new_volume = 0;
-      console.log("volemeUpDown", new_volume);
+      //console.log("volemeUpDown", new_volume);
       this.playerInstance.volume(new_volume);
       this.SET_VOLUME(new_volume);
     },
