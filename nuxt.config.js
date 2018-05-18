@@ -28,7 +28,6 @@ module.exports = {
   },
   modules: [
     ['@nuxtjs/bootstrap-vue', { css: true }],
-  
      
   ],
   /*
@@ -52,6 +51,9 @@ module.exports = {
         // ...etc.
       })
     ],
+    extractCSS: {
+      allChunks: true
+    },
     /*
     ** Run ESLint on save
     */
