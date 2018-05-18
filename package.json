@@ -9,8 +9,13 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
+    "heroku-postbuild": "npm run build",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint"
+  },
+  "engine": {
+    "node": "8.9.4",
+    "npm": "5.6.0"
   },
   "dependencies": {
     "@nuxtjs/bootstrap-vue": "^2.0.4",
