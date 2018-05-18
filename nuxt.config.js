@@ -21,7 +21,9 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700&amp;subset=cyrillic' },
       { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.6/css/all.css' },
       { rel: 'stylesheet', href: 'http://simplelineicons.com/css/simple-line-icons.css' },
-      { rel: 'stylesheet', href: 'https://www.realmusic.ru/css/flags.css' }
+      { rel: 'stylesheet', href: 'https://www.realmusic.ru/css/flags.css' },
+      { rel: 'stylesheet', href: '~assets/css/test.css' }
+
     ]
   },
   modules: [
