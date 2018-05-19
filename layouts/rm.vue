@@ -62,5 +62,5 @@ export default {
 <style lang="scss">
 @import "~/node_modules/vuejs-noty/dist/vuejs-noty.css";
 @import "~/assets/css/old_global.css";
-//@import "~/assets/css/simple-line-icons.css";
+@import "~/assets/css/simple-line-icons.css";
 </style>
