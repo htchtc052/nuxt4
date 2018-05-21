@@ -5,7 +5,6 @@
     <header class="rm-head position-relative">
       <div class="d-flex p-3 justify-content-between align-items-center">
         <Logo></Logo>
-        test
         <UserMenu></UserMenu>
       </div>
       <MainMenu></MainMenu>

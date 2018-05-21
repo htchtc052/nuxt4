@@ -1,9 +1,9 @@
 const webpack = require('webpack')
 
 module.exports = {
-  /*
-  ** Headers of the page
-  */
+  env: {
+    apiURL: 'http://localhost:3002'
+  },
   head: {
     title: 'RealMusic',
     meta: [
