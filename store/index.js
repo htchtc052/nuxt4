@@ -1,12 +1,14 @@
 import Vuex from 'vuex'
 import playlist from '~/store/playlist'
-//import test from '~/store/test'
+import lang from '~/store/lang'
+import auth from '~/store/auth'
 
 const createStore = () => {
   return new Vuex.Store({
     modules: {
       'playlist': playlist,
-      //'test': test
+      'lang': lang,
+      'auth': auth,
     }
   })
 }

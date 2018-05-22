@@ -1,6 +1,6 @@
 <template>
   <div class="pr-2">
-     <a href="#" class="mt-2 rm-head__button btn btn-primary border border-white py-1 px-2 font-weight-light">
+     <a href="/login" class="mt-2 rm-head__button btn btn-primary border border-white py-1 px-2 font-weight-light">
        <span class="icon-lock icons"></span> Войти
      </a>
   </div>

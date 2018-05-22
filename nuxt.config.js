@@ -2,7 +2,7 @@ const webpack = require('webpack')
 
 module.exports = {
   env: {
-    apiURL: 'http://localhost:3002'
+    apiURL: 'http://localhost:3004'
   },
   head: {
     title: 'RealMusic',
@@ -26,21 +26,24 @@ module.exports = {
 
     ]
   },
-  modules: [
-    ['@nuxtjs/bootstrap-vue', { css: true }],
-     
-  ],
-  /*
-  ** Customize the progress bar color
-  */
+ 
   loading: { color: '#3B8070' },
-
 
  plugins: [
     { src: '~/plugins/vuejs-noty', ssr: false },
+    { src: '~plugins/i18n', ssr: true },
+    { src: '~plugins/axios', ssr: true },
     { src: '~plugins/tracksHelper.js', ssr: false },
     { src: '~/plugins/persistedStorage.js', ssr: false },
+    { src: '~/plugins/bootstrap.js', ssr: false }
   ],
+ css: [ { src: 'bootstrap/scss/bootstrap.scss', lang: 'scss'} ],
+  router: {
+    middleware: [
+      'locale',
+      'check-auth'
+    ]
+  },
   build: {
     vendor: ['axios'],
 

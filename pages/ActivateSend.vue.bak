@@ -1,0 +1,84 @@
+<template>
+	<div class="container-fluid">	
+		<div class="row">
+			<div class="col-lg-4  mx-auto">
+				<div class="card">
+					<h2 class="card-title mx-auto">
+						{{ $t('title') }}
+					</h2>
+					<div class="card-body">
+						<form @submit.prevent="submit" role="form" class="form">
+						<div class="form-group">
+							<div>{{ $t('activate_text', { email: this.user.email }) }} </div>
+						</div>
+					
+						<div class="form-group mx-auto">
+							<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('submit') }}</button>
+						</div>
+					</form>
+				</div>
+		    </div>
+	    </div>
+    </div>
+</div>
+</template>
+
+<script>
+	import {api} from "../../config";
+	import {mapGetters} from "vuex";
+
+	export default {
+		i18n: {
+			messages: {
+				en: { 
+					"title": "Activation",
+					"activate_text": "Your need confirm email {email} for activate account",
+					"submit": "Send",
+					"done": "Activate link sending to {email}",
+				},
+				ru: {
+					"title": "Активация",
+					"activate_text": "Нужно подтвердить email {email} для активации аккаунта",
+					"submit": "Отослать",
+					"done": "Ссылка активации отправлена на {email}",
+				}
+			}
+		},
+		computed: {
+			meta_title: function() {
+				return this.$t('title');
+			},
+			...mapGetters({
+				 user: 'userData'
+			})
+		},
+		metaInfo () {
+			return {
+				title: this.meta_title,
+			}
+		},
+		data() {
+			return {
+				loading: false,
+			};
+		},
+		methods: {
+			async submit() {
+				this.loading = true;
+
+				try {
+					const res = await axios.post(api.activateSendEmail)
+					
+					this.loading = false;
+					
+					this.$noty.success(this.$t('done', {email: this.user.email}))
+
+				} catch (errors) {
+					this.loading = false;
+				}
+			}
+           
+		},
+		
+	}
+</script>

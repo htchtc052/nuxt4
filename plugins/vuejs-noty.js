@@ -1,4 +1,13 @@
-import Vue from 'vue'
-import VueNoty from 'vuejs-noty'
+export default ({ app }) => 
+{
+  
+  const Noty = require('noty');
 
-Vue.use(VueNoty)
+  Noty.overrideDefaults({
+    layout   : 'bottomRight',
+    theme    : 'bootstrap-v4',
+    progressBar: true,
+    timeout: 1000,
+  });
+  app.Noty = Noty  
+}
