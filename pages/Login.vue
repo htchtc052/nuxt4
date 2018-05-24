@@ -35,13 +35,11 @@
 							<div class="form-group mx-auto">
 								<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('login_submit') }}</button>
 							</div>
-							<!-- 
 								<div class="form-group">
-									<router-link :to="{name: 'password_send'}">
-										<a class="">{{ $t('forgot_password') }}</a>
-									</router-link>
+										<div><a href="/forgot_password">{{ $t('forgot_password') }}</a></div>
+                    <div><a href="/register">{{ $t('register_title') }}</a></div>
 								</div>
-								-->
+							
 						</form>	
 
 
@@ -55,24 +53,10 @@
 </template>
 
 <script>
-//import axios from '~/plugins/axios.js'
-
-import axios from 'axios'
-//import Vue from 'vue'
-
+import axios from "axios";
 export default {
-  middleware: 'guest',
+  middleware: "guest",
   layout: "rm",
-  computed: {
-    meta_title: function() {
-      return this.$t("title");
-    }
-  },
-  metaInfo() {
-    return {
-      title: this.meta_title
-    };
-  },
   data() {
     return {
       loading: false,
@@ -86,31 +70,25 @@ export default {
       }
     };
   },
-  mounted() {
-      //this.$noty.error(3333)
-      //this.$toasted.show('hello billo')
-  },
   methods: {
     async sendForm() {
       this.loading = true;
 
       try {
-        console.log("before submit", axios.defaults.baseURL);
-         const res = await axios.post("api/login", this.form);
-        return
-         //console.log("after register");
+        //console.log("before submit", axios.defaults.baseURL);
+        const res = await axios.post("api/login", this.form);
+        this.$store.dispatch("auth/saveToken", res.data.token);
 
-        this.$store.dispatch("saveToken", res.data.token);
-        //console.log("after save token");
-
-        await this.$store.dispatch("fetchUser");
+        await this.$store.dispatch("auth/fetchUser");
 
         this.loading = false;
 
-        this.$noty.success(this.$t("login_done"));
-		
-		    this.$router.push({ name: "profile" });
-       /*  if (this.$store.getters["verified"]) {
+        new this.$noty({ type: "success", text: this.$t("login_done") }).show();
+
+        console.log("GO TO PROFILE");
+
+        this.$router.push({ name: "profile" });
+        /*  if (this.$store.getters["verified"]) {
           this.$router.push({ name: "profile" });
         } else {
           this.$router.push({ name: "activate_send" });
@@ -131,6 +109,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

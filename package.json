@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@nuxtjs/bootstrap-vue": "^2.0.4",
+    "@nuxtjs/router": "^1.0.1",
     "axios": "^0.17.1",
     "bootstrap": "^4.0.0",
     "howler": "^2.0.10",

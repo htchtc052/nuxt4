@@ -3,8 +3,8 @@ import Cookies from 'js-cookie'
 const state = () => ({
   locale: 'ru',
   locales: {
-    'en': 'en',
-    'ru': 'ru'
+    'en': 'EN',
+    'ru': 'RU'
   }
 })
 

@@ -38,17 +38,18 @@ const mutations = {
 }
 
 const actions = {
-  saveToken ({ commit, dispatch }, { token, remember }) {
+  saveToken ({ commit, dispatch }, token) {
+    //console.log("SET_TOKEN", token)
     commit('SET_TOKEN', token)
 
-    Cookies.set('token', token, { expires: remember ? 365 : null })
+    Cookies.set('token', token, { expires: 365  })
   },
 
   async fetchUser ({ commit }) {
 
     try {
-      const { data } = await axios.get('/user')
-      console.log("fetch", data.email)
+      const { data } = await axios.get('api/user')
+      console.log("fetch", data)
       commit('FETCH_USER_SUCCESS', data)
     } catch (e) {
       console.log("error fetch", e)

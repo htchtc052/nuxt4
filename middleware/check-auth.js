@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export default async ({ store, req }) => {
   const token = store.getters['auth/token']
-  console.log("auth-check middleware", process.server)
+  console.log("auth-check middleware", "server",  process.server)
 
   //если на сервере то добавляем токен, тк было return в плагине
   if (process.server) {

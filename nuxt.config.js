@@ -28,7 +28,9 @@ module.exports = {
   },
  
   loading: { color: '#3B8070' },
-
+  modules: [
+    '@nuxtjs/router',
+  ],
  plugins: [
     { src: '~/plugins/vuejs-noty', ssr: false },
     { src: '~plugins/i18n', ssr: true },

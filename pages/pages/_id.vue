@@ -2,18 +2,18 @@
 <div class="bg-white p-3 page">
 
   <div class="m-1 d-flex justify-content-between align-items-center pt-2 pb-3">
-    <PageTitle></PageTitle>
-    <PageControls></PageControls>
+<!--     <PageTitle></PageTitle>
+    <PageControls></PageControls> -->
   </div>
 
   <div class="d-flex">
     <div class="mr-3 page__leftbox">
-      <PageAvatar></PageAvatar>
-      <PageRecommendedTracks></PageRecommendedTracks>
+<!--       <PageAvatar></PageAvatar>
+      <PageRecommendedTracks></PageRecommendedTracks> -->
     </div>
     <div class="w-100">
-      <PageMenu></PageMenu>
-      <PageMain></PageMain>
+    <!--   <PageMenu></PageMenu>
+      <PageMain></PageMain> -->
     </div>
   </div>
 </div>
@@ -22,24 +22,24 @@
 <script>
 
 import axios from 'axios'
-import PageTitle from '~/components/pages/Title.vue'
+/* import PageTitle from '~/components/pages/Title.vue'
 import PageControls from '~/components/pages/Controls.vue'
 import PageAvatar from '~/components/pages/Avatar.vue'
 import PageMenu from '~/components/pages/Menu.vue'
 import PageRecommendedTracks from '~/components/pages/RecommendedTracks.vue'
-import PageMain from '~/components/pages/Main.vue'
+import PageMain from '~/components/pages/Main.vue' */
 
 export default {
 
   layout: 'rm',
 
   components: {
-    PageTitle,
+  /*   PageTitle,
     PageControls,
     PageAvatar,
     PageMenu,
     PageRecommendedTracks,
-    PageMain
+    PageMain */
   },
 
   asyncData(context) { // load data to current page component
@@ -74,7 +74,7 @@ export default {
     });
 */
 
-    return axios.all([
+/*     return axios.all([
       axios.get(`http://dev.realmusic.ru/myapi/get_data.php?${ context.params.id }`),
       axios.get(`http://dev.realmusic.ru/myapi/get_ft.php?${ context.params.id }`)
     ])
@@ -83,7 +83,7 @@ export default {
         page: pageRes.data,
         ft: ftRes.data
       }
-    }));
+    })); */
 
   },
 

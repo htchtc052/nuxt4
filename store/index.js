@@ -1,16 +1,36 @@
 import Vuex from 'vuex'
+import Cookies from 'js-cookie'
+import {  cookieFromRequest } from '~/utils'
 import playlist from '~/store/playlist'
 import lang from '~/store/lang'
 import auth from '~/store/auth'
 
+
+
 const createStore = () => {
-  return new Vuex.Store({
-    modules: {
-      'playlist': playlist,
-      'lang': lang,
-      'auth': auth,
-    }
+return new Vuex.Store({
+  actions: {
+    nuxtServerInit({commit}, {req}) {
+      const token = cookieFromRequest(req, 'token')
+      if (token) {
+        commit('auth/SET_TOKEN', token)
+      }
+
+      const locale = cookieFromRequest(req, 'locale')
+      if (locale) {
+        commit('lang/SET_LOCALE', {locale})
+      }
+
+      console.log("nuxtServerInit", token, locale)
+
+    },
+  },
+  modules: {
+    'playlist': playlist,
+    'lang': lang,
+    'auth': auth,
+  }
   })
 }
 
-export default createStore
+    export default createStore
