@@ -2,7 +2,7 @@
 	<div class="mx-auto">
 		<div class="card">
 			<h2 class="card-title mx-auto">
-				{{ $t('title') }}
+				{{ $t('edit_profile_title') }}
 			</h2>
 			<div class="card-body">
 					<form @submit.prevent="submit" role="form" class="form">
@@ -14,12 +14,13 @@
 								:class="{'is-invalid' : error.name}"
 								id="name"
 								v-model="form.name"
+								
 								:disabled="loading"
 							/>
 							<div class="invalid-feedback" v-show="error.name">{{ error.name }}</div>
 						</div>
 						<div class="form-group mx-auto">
-							<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('submit') }}</button>
+							<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('edit_profile_submit') }}</button>
 						</div>
 					</form>
 			</div>
@@ -29,56 +30,42 @@
 </template>
 <script>
 	
-	import {api} from "../../../config";
 	import {mapState, mapGetters} from "vuex";
+	import axios from "axios";
 
 	export default {
-		i18n: {
-			messages: {
-				en: { 
-					"title": "Update profile",
-					"submit": "Save",
-					"done": "Info updated",
-				},
-				ru: {
-					"title": "Изменение профиля",
-					"submit": "Сохранить",
-					"done": "Информация обновлена",
-				}
-			}
-		},
+		//middleware: "auth",
+  		layout: "rm",
 		computed: {
-			meta_title: function() {
-				return this.$t('title');
-			},
 			...mapGetters({
-				 form: 'userData'
+				 user: 'auth/user'
 			})
-		},
-		metaInfo () {
-			return {
-				title: this.meta_title,
-			}
 		},
 		data() {
 			return {
 				loading: false,
+				form: {
+					name: '',
+				},
 				error: {
 					name: '',
 				}
 			};
 		},
+		mounted() {
+			this.form.name = this.user.name
+		},
 		methods: {
 			async submit() {
 				this.loading = true;
 				try {
-					const res = await axios.post(api.updateUserProfile, this.form)
+					const res = await axios.post("api/user/update", this.form)
+					
+					this.user.name = this.form.name
 					
 					this.loading = false;
-
-					this.$store.dispatch('setUser', res.data.user);				
 					
-					this.$noty.success(this.$t('done'))
+					new this.$noty({ type: "success", text: this.$t("edit_profile_done") }).show();
 
 					this.$router.push({name: 'profile'})
 

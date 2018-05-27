@@ -127,7 +127,7 @@ export default {
     }
   },
   mounted() {
-    //console.log("mounted", this.track.id ? true : false);
+    //console.log("mounted player.vue trackid", this.track.id ? this.track.id : null);
     this.track.id ? this.SET_PAUSE(true) : {};
   },
   computed: {

@@ -9,6 +9,9 @@ const state = () => ({
 const getters = {
   user: state => state.user,
   token: state => state.token,
+  verified: state => {
+    return state.user ? !!state.user.is_verified : false
+  },
   check: state => { 
     return state.user !== null
   }
@@ -52,7 +55,7 @@ const actions = {
       console.log("fetch", data)
       commit('FETCH_USER_SUCCESS', data)
     } catch (e) {
-      console.log("error fetch", e)
+      console.log("error fetch")
       Cookies.remove('token')
 
       commit('FETCH_USER_FAILURE')
@@ -63,10 +66,12 @@ const actions = {
     commit('UPDATE_USER', payload)
   },
 
-  async logout ({ commit }) {
-    try {
-      await axios.post('/logout')
-    } catch (e) { }
+  async logout ({ commit, getters }) {
+    if (getters.token) {
+      try {
+        await axios.post('api/logout')
+      } catch (e) { }
+    }
 
     Cookies.remove('token')
 

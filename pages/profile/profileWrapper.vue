@@ -36,7 +36,7 @@
 
 <script>
 	export default {
-		middleware: "auth",
+		middleware: ["auth", "verified"],
   		layout: "rm",
 		i18n: {
 			messages: {
@@ -60,4 +60,5 @@
 		
 
 	}
+	
 </script>

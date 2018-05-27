@@ -67,7 +67,7 @@ export default ({
       return Promise.reject()
     } else if (error.response.status == 403) {
       console.log("status 403", error.response.data[0]);
-      if (error.response.data[0] == "need_active") {
+     /*  if (error.response.data[0] == "need_active") {
         app.$noty.error(app.$t("error_need_active"))
         router.push({
           name: 'activate_send'
@@ -77,10 +77,10 @@ export default ({
         router.push({
           name: 'profile'
         });
-      }
-      return Promise.reject();
+      } */
+      return Promise.reject(error.response);
     } else if (error.response.status == 422 || error.response.status == 423) {
-      return Promise.reject(error.response.data.errors)
+      return Promise.reject(error.response)
     } else if (error.response.status == 401) {
 
       //  console.log("status 401", error.config, error.config._retry, error.config.refresh_req);

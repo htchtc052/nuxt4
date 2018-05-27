@@ -36,8 +36,9 @@
 								<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('login_submit') }}</button>
 							</div>
 								<div class="form-group">
-										<div><a href="/forgot_password">{{ $t('forgot_password') }}</a></div>
-                    <div><a href="/register">{{ $t('register_title') }}</a></div>
+										<div><nuxt-link :to="{ name: 'password_send'}">{{ $t('forgot_password') }}</nuxt-link></div>
+                    <div><nuxt-link :to="{ name: 'register' }">{{ $t('register_title') }}</nuxt-link></div>
+                    <div><nuxt-link :to="{ name: 'password_set', params: { token: 'test'} }">{{ $t('password_set_title') }}</nuxt-link></div>
 								</div>
 							
 						</form>	
@@ -70,6 +71,13 @@ export default {
       }
     };
   },
+  mounted() {
+    
+  /*   if (this.$route.query.error_msg) {
+        console.log("login mounted error param", this.$route.query.error_msg)
+        new this.$noty({ type: "error", text: this.$t(this.$route.query.error_msg) }).show();
+    } */
+  },
   methods: {
     async sendForm() {
       this.loading = true;
@@ -88,11 +96,11 @@ export default {
         console.log("GO TO PROFILE");
 
         this.$router.push({ name: "profile" });
-        /*  if (this.$store.getters["verified"]) {
+        if (this.$store.getters["auth/user"].verified) {
           this.$router.push({ name: "profile" });
         } else {
           this.$router.push({ name: "activate_send" });
-        } */
+        }
       } catch (errors) {
         this.loading = false;
         errors ? this.setErrors(errors) : this.clearErrors();

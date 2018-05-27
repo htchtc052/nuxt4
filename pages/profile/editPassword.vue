@@ -3,7 +3,7 @@
 	<div class="mx-auto">
 		<div class="card">
 			<h2 class="card-title mx-auto">
-				{{ $t('title') }}
+				{{ $t('edit_password_title') }}
 			</h2>
 			<div class="card-body">
 					<form @submit.prevent="submit" role="form" class="form">
@@ -33,7 +33,7 @@
 							</div>	
 
 						<div class="form-group mx-auto">
-							<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('submit') }}</button>
+							<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('edit_password_submit') }}</button>
 						</div>
 					</form>
 			</div>
@@ -42,34 +42,11 @@
 
 </template>
 <script>
-	
-	import {api} from "../../../config";
+	import axios from "axios";
 	export default {
-		i18n: {
-			messages: {
-				en: { 
-					"title": "Change password",
-					"submit": "Save",
-					"done": "Password changed",
-				},
-				ru: {
-					"title": "Смена пароля",
-					"submit": "Сохранить",
-					"done": "Пароль изменен",
-					
-				}
-			}
-		},
-		
 		computed: {
-			meta_title: function() {
-				return this.$t('title');
-			},
 		},
 		metaInfo () {
-			return {
-				title: this.meta_title,
-			}
 		},
 		data() {
 			return {
@@ -88,11 +65,11 @@
 			async submit() {
 				this.loading = true;
 				try {
-					const res = await axios.post(api.updateUserPassword, this.form)
+					const res = await axios.post("api/user/password", this.form)
 					
 					this.loading = false;
-					
-					this.$noty.success(this.$t('done'))
+
+       				new this.$noty({ type: "success", text: this.$t("edit_password_done") }).show();
 
 					this.$router.push({name: 'profile'})
 

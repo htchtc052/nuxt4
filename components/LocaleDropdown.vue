@@ -34,6 +34,3 @@ export default {
   }
 }
 </script>
-<style>
-.bll { font-weight: bold; font-size: 15px; color:white}
-</style>
