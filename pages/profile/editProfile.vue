@@ -29,61 +29,63 @@
 
 </template>
 <script>
-	
-	import {mapState, mapGetters} from "vuex";
-	import axios from "axios";
+import { mapState, mapGetters } from "vuex";
+import axios from "axios";
 
-	export default {
-		//middleware: "auth",
-  		layout: "rm",
-		computed: {
-			...mapGetters({
-				 user: 'auth/user'
-			})
-		},
-		data() {
-			return {
-				loading: false,
-				form: {
-					name: '',
-				},
-				error: {
-					name: '',
-				}
-			};
-		},
-		mounted() {
-			this.form.name = this.user.name
-		},
-		methods: {
-			async submit() {
-				this.loading = true;
-				try {
-					const res = await axios.post("api/user/update", this.form)
-					
-					this.user.name = this.form.name
-					
-					this.loading = false;
-					
-					new this.$noty({ type: "success", text: this.$t("edit_profile_done") }).show();
+export default {
+  //middleware: "auth",
+  layout: "rm",
+  computed: {
+    ...mapGetters({
+      user: "auth/user"
+    })
+  },
+  data() {
+    return {
+      loading: false,
+      form: {
+        name: ""
+      },
+      error: {
+        name: ""
+      }
+    };
+  },
+  mounted() {
+    this.form.name = this.user.name;
+  },
+  methods: {
+    async submit() {
+      this.loading = true;
+      try {
+        const res = await axios.post("api/user/update", this.form);
 
-					this.$router.push({name: 'profile'})
+        this.user.name = this.form.name;
 
-				} catch (errors) {
-					this.loading = false;
-					(errors) ? this.setErrors(errors) : this.clearErrors()
-				}
-			},
-			setErrors(errors) {
-				this.error.name = errors.name ? errors.name[0] : null;
-			},
-			clearErrors() {
-				this.error.name = null;
-			},
-			created() {
-				console.log("form", form);
-			}
-			
-		}
-	}
+        this.loading = false;
+
+        new this.$noty({
+          type: "success",
+          text: this.$t("edit_profile_done")
+        }).show();
+
+        this.$router.push({ name: "profile" });
+      } catch (response) {
+        this.loading = false;
+        response.data.errors
+          ? this.setErrors(response.data.errors)
+          : this.clearErrors();
+      }
+    },
+    setErrors(errors) {
+      this.error.name = errors.name ? errors.name[0] : null;
+    },
+    clearErrors() {
+      this.error.name = null;
+    },
+    created() {
+      console.log("form", form);
+    }
+  }
+};
 </script>

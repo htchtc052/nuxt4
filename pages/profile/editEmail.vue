@@ -43,83 +43,82 @@
 
 </template>
 <script>
-	
-	import {api} from "../../../config";
+import { api } from "../../../config";
 
-	import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
-	export default {
-		i18n: {
-			messages: {
-				en: { 
-					"title": "Change email",
-					"submit": "Save",
-					"done": "Change confirm link sending to {email}",
-					"old_email": "Old email",
-					"new_email": "New email",
-				},
-				ru: {
-					"title": "Смена email",
-					"submit": "Сохранить",
-					"done": "Ссылка подтвержения изменения email направлена на {email}",
-					"old_email": "Старый email",
-					"new_email": "Новый email",
-				}
-			}
-		},
+export default {
+  i18n: {
+    messages: {
+      en: {
+        title: "Change email",
+        submit: "Save",
+        done: "Change confirm link sending to {email}",
+        old_email: "Old email",
+        new_email: "New email"
+      },
+      ru: {
+        title: "Смена email",
+        submit: "Сохранить",
+        done: "Ссылка подтвержения изменения email направлена на {email}",
+        old_email: "Старый email",
+        new_email: "Новый email"
+      }
+    }
+  },
 
-		computed: {
-			meta_title: function() {
-				return this.$t('title');
-			},
-			...mapGetters({
-				 userData: 'userData'
-			})
-		},
-		metaInfo () {
-			return {
-				title: this.meta_title,
-			}
-		},
-		data() {
-			return {
-				loading: false,
-				form: {
-					email: '',
-				},
-				error: {
-					email: null
-				},
-			}
-		},
-		
-		methods: {
-			async submit() {
-				this.loading = true;
-				try {
-					const res = await axios.post(api.editUserEmail, this.form)
-					
-					this.loading = false;
-					
-					this.$noty.success(this.$t('done', {email: this.form.email}))
+  computed: {
+    meta_title: function() {
+      return this.$t("title");
+    },
+    ...mapGetters({
+      userData: "userData"
+    })
+  },
+  metaInfo() {
+    return {
+      title: this.meta_title
+    };
+  },
+  data() {
+    return {
+      loading: false,
+      form: {
+        email: ""
+      },
+      error: {
+        email: null
+      }
+    };
+  },
 
-					this.$router.push({name: 'profile'})
+  methods: {
+    async submit() {
+      this.loading = true;
+      try {
+        const res = await axios.post(api.editUserEmail, this.form);
 
-				} catch (errors) {
-					this.loading = false;
-					(errors) ? this.setErrors(errors) : this.clearErrors()
-				}
-			},
-			setErrors(errors) {
-				this.error.email = errors.email ? errors.email[0] : null;
-			},
-			clearErrors() {
-				this.error.email = null;
-			},
-		}
-			,created() {
-				console.log("userData", this.userData);
+        this.loading = false;
 
-			}
-	}
+        this.$noty.success(this.$t("done", { email: this.form.email }));
+
+        this.$router.push({ name: "profile" });
+      } catch (response) {
+        this.loading = false;
+        response.data.errors
+          ? this.setErrors(response.data.errors)
+          : this.clearErrors();
+      }
+    },
+    setErrors(errors) {
+      this.error.email = errors.email ? errors.email[0] : null;
+    },
+    clearErrors() {
+      this.error.email = null;
+    }
+  },
+  created() {
+    console.log("userData", this.userData);
+  }
+};
 </script>

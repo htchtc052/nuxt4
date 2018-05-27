@@ -138,9 +138,11 @@ export default {
         console.log("GO TO ACTIVATE");
 
         this.$router.push({ name: "activate_send" });
-      } catch (errors) {
+      } catch (response) {
         this.loading = false;
-        errors ? this.setErrors(errors) : this.clearErrors();
+        response.data.errors
+          ? this.setErrors(response.data.errors)
+          : this.clearErrors();
       }
     },
     setErrors(errors) {

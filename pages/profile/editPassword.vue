@@ -42,51 +42,54 @@
 
 </template>
 <script>
-	import axios from "axios";
-	export default {
-		computed: {
-		},
-		metaInfo () {
-		},
-		data() {
-			return {
-				loading: false,
-				form: {
-					password: null,
-					confirm_password: null,
-				},
-				error: {
-					password: null,
-					confirm_password: null,
-				}
-			}
-		},
-		methods: {
-			async submit() {
-				this.loading = true;
-				try {
-					const res = await axios.post("api/user/password", this.form)
-					
-					this.loading = false;
+import axios from "axios";
+export default {
+  computed: {},
+  metaInfo() {},
+  data() {
+    return {
+      loading: false,
+      form: {
+        password: null,
+        confirm_password: null
+      },
+      error: {
+        password: null,
+        confirm_password: null
+      }
+    };
+  },
+  methods: {
+    async submit() {
+      this.loading = true;
+      try {
+        const res = await axios.post("api/user/password", this.form);
 
-       				new this.$noty({ type: "success", text: this.$t("edit_password_done") }).show();
+        this.loading = false;
 
-					this.$router.push({name: 'profile'})
+        new this.$noty({
+          type: "success",
+          text: this.$t("edit_password_done")
+        }).show();
 
-				} catch (errors) {
-					this.loading = false;
-					(errors) ? this.setErrors(errors) : this.clearErrors()
-				}
-			},
-			setErrors(errors) {
-				this.error.password = errors.password ? errors.password[0] : null;
-				this.error.confirm_password = errors.confirm_password ? errors.confirm_password[0] : null;
-			},
-			clearErrors() {
-				this.error.password = null;
-				this.error.confirm_password = null;
-			}
-			
-		}
-	}
+        this.$router.push({ name: "profile" });
+      } catch (response) {
+        this.loading = false;
+        response.data.errors
+          ? this.setErrors(response.data.errors)
+          : this.clearErrors();
+      }
+    },
+    setErrors(errors) {
+      this.error.password = errors.password ? errors.password[0] : null;
+      this.error.confirm_password = errors.confirm_password
+        ? errors.confirm_password[0]
+        : null;
+    },
+    clearErrors() {
+      this.error.password = null;
+      this.error.confirm_password = null;
+    }
+  }
+};
 </script>

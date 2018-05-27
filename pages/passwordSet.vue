@@ -141,7 +141,6 @@ export default {
     },
   },
   middleware: async ({ route, query, redirect, app }) => {
-    //токен путается если авторизован.. явно его указать..
      if (process.server) {
       console.log("passwordSend midd process server", process.server)
       

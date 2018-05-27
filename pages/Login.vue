@@ -72,8 +72,7 @@ export default {
     };
   },
   mounted() {
-    
-  /*   if (this.$route.query.error_msg) {
+    /*   if (this.$route.query.error_msg) {
         console.log("login mounted error param", this.$route.query.error_msg)
         new this.$noty({ type: "error", text: this.$t(this.$route.query.error_msg) }).show();
     } */
@@ -101,9 +100,11 @@ export default {
         } else {
           this.$router.push({ name: "activate_send" });
         }
-      } catch (errors) {
+      } catch (response) {
         this.loading = false;
-        errors ? this.setErrors(errors) : this.clearErrors();
+        response.data.errors
+          ? this.setErrors(response.data.errors)
+          : this.clearErrors();
       }
     },
     setErrors(errors) {
