@@ -73,11 +73,12 @@ export default {
         }).show();
 
         this.$router.push({ name: "profile" });
-      } catch (response) {
+       } catch (response) {
         this.loading = false;
-        response.data.errors
-          ? this.setErrors(response.data.errors)
-          : this.clearErrors();
+        if (response) {
+          if (response.data.errors) this.setErrors(response.data.errors);
+          else this.clearErrors();
+        }
       }
     },
     setErrors(errors) {

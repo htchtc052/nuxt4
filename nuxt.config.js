@@ -30,6 +30,8 @@ module.exports = {
   loading: { color: '#3B8070' },
   modules: [
     '@nuxtjs/router',
+    ['cookie-universal-nuxt', { parseJSON: false }],
+
   ],
  plugins: [
     { src: '~/plugins/vuejs-noty', ssr: false },

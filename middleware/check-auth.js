@@ -1,20 +1,36 @@
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
-export default async ({ store, req }) => {
-  const token = store.getters['auth/token']
-  console.log("auth-check middleware", "server",  process.server)
+export default async ({
+  app,
+  store,
+  req,
+  res,
+  redirect
+}) => {
+  //console.log("check-auth middleware", "is_server", process.server ? true : false, "is_check")
 
-  //если на сервере то добавляем токен, тк было return в плагине
-  if (process.server) {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+
+  if (!store.getters['auth/check'] && store.getters['auth/token']) {
+    //console.log("check-auth midd before fetch user")
+    if (!process.server) {
+      //console.log("check-auth midd client before fetch user!")
+      //await store.dispatch('auth/fetchUser')
     } else {
-      delete axios.defaults.headers.common['Authorization']
+      if (!req) {
+        console.log("check-auth pass if !req")
+        return
+      }
+
+      try {
+        console.log("check-auth before serverFetchUser")
+        await store.dispatch('auth/serverFetchUser')
+        console.log("check-auth after serverFetchUser")
+      } catch (errors) {
+        console.log("check-auth serverFetchUser error")
+        return redirect('/login')
+      }
     }
-  }  
- 
-  if (!store.getters['auth/check'] && token) {
-    console.log("need ferch user")
-    await store.dispatch('auth/fetchUser')
   }
 }

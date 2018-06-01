@@ -14,6 +14,8 @@ return new Vuex.Store({
       const token = cookieFromRequest(req, 'token')
       if (token) {
         commit('auth/SET_TOKEN', token)
+      } else {
+        commit('auth/LOGOUT')
       }
 
       const locale = cookieFromRequest(req, 'locale')
@@ -21,7 +23,7 @@ return new Vuex.Store({
         commit('lang/SET_LOCALE', {locale})
       }
 
-      console.log("nuxtServerInit", token, locale)
+      console.log("nuxtServerInit token", token ? token : null, locale)
 
     },
   },

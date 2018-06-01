@@ -38,8 +38,12 @@
 								<div class="form-group">
 										<div><nuxt-link :to="{ name: 'password_send'}">{{ $t('forgot_password') }}</nuxt-link></div>
                     <div><nuxt-link :to="{ name: 'register' }">{{ $t('register_title') }}</nuxt-link></div>
-                    <div><nuxt-link :to="{ name: 'password_set', params: { token: 'test'} }">{{ $t('password_set_title') }}</nuxt-link></div>
-								</div>
+                    <div><nuxt-link :to="{ name: 'password_set', params: { token: 'test' } }">{{ $t('password_set_title') }}</nuxt-link></div>
+                    <div><nuxt-link :to="{ name: 'profile' }">Profile</nuxt-link></div>
+                    <div><a  href="/">Main page</a></div>
+					
+					
+                </div>
 							
 						</form>	
 
@@ -82,29 +86,41 @@ export default {
       this.loading = true;
 
       try {
-        //console.log("before submit", axios.defaults.baseURL);
-        const res = await axios.post("api/login", this.form);
-        this.$store.dispatch("auth/saveToken", res.data.token);
+       console.log(" login.vue before submit", axios.defaults.baseURL);
+        const { data } = await axios.post("api/login", this.form);
+        this.$store.commit("auth/SET_USER", data.user)
+        console.log("login.vue  success after user")
 
-        await this.$store.dispatch("auth/fetchUser");
+        
+          this.$store.commit("auth/SET_TOKEN", data.token)
 
+          this.$cookies.set('token', data.token, {
+            path: '/',
+            maxAge: 31536000
+          })
+          console.log("login.vue   success after token")
+
+        
         this.loading = false;
 
         new this.$noty({ type: "success", text: this.$t("login_done") }).show();
 
-        console.log("GO TO PROFILE");
+        console.log("login.vue GO TO PROFILE");
 
-        this.$router.push({ name: "profile" });
-        if (this.$store.getters["auth/user"].verified) {
-          this.$router.push({ name: "profile" });
+        //this.$router.push({ name: "profile" });
+        if (!this.$store.getters["auth/verified"]) {
+           this.$router.push({ name: "activate_send" });
         } else {
-          this.$router.push({ name: "activate_send" });
-        }
+         this.$router.push({ name: "profile" });
+        } 
+
       } catch (response) {
         this.loading = false;
-        response.data.errors
-          ? this.setErrors(response.data.errors)
-          : this.clearErrors();
+        if (response && response.data && response.data.errors) {
+          this.setErrors(response.data.errors);
+        } else {
+          this.clearErrors();
+        }
       }
     },
     setErrors(errors) {
