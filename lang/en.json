@@ -62,7 +62,17 @@
   "error_activate_set": "Set new email link expired or invalid",
   "error_password_reset": "Reset password link expired or invalid",
   "success_email_set": "Success set new email {email}",
-  "error_email_set": "Set new email link expired or invalid"
+  "error_email_set": "Set new email link expired or invalid",
+  "error_forbidden": "Action forbidden",
+  "login_with": "Login with",
+  "github": "GitHub",
+  "facebook": "Facebook",
+  "yandex": "Yandex",
+  "google": "Google",
+  "vkontakte": "Vkontakte",
+  "odnoklassniki": "Оdnoklassniki",
+  "mailru": "@mail.ru"
+
 
   
 }

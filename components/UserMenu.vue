@@ -6,7 +6,12 @@
   </div>
 	
     <div class="col-md-4">
-     <nuxt-link :to="{name: 'login'}" v-if="!check" class="bll"> {{ $t('sign_in') }} </nuxt-link>
+     <div>
+		 <nuxt-link :to="{name: 'login'}" v-if="!check" class="bll"> {{ $t('sign_in') }} </nuxt-link>
+     </div>
+		 <div>
+		 <nuxt-link :to="{name: 'register'}" v-if="!check" class="bll"> {{ $t('register_title') }} </nuxt-link>
+		 </div>
      <nuxt-link :to="{name: 'profile'}" class="bll" v-if="check"> {{ $t('profile_as', {name: user.name}) }}</nuxt-link>
 		 </div>
 		 <div class="col-md-2">

@@ -84,7 +84,7 @@
                                             <div><a href="/login">{{ $t('login_title') }}</a></div>
                                         </div>
 								</form>
-					<!-- 	<login-social /> -->
+						<login-social />
 					</div>
 				</div>
 			</div>
@@ -93,6 +93,9 @@
 
 <script>
 import axios from "axios";
+
+import LoginSocial from "~/components/LoginSocial.vue";
+
 export default {
   middleware: "guest",
   layout: "rm",
@@ -116,18 +119,16 @@ export default {
     };
   },
   components: {
-    //LoginSocial
+    LoginSocial
   },
   methods: {
     async submit() {
       this.loading = true;
 
       try {
-        const res = await axios.post("api/register", this.form);
-        this.$store.dispatch("auth/saveToken", res.data.token);
-
-        await this.$store.dispatch("auth/fetchUser");
-
+        // console.log(" register.vue before submit");
+        const { data } = await axios.post("api/register", this.form);
+        this.$store.dispatch("auth/login", data);
         this.loading = false;
 
         new this.$noty({
@@ -135,14 +136,13 @@ export default {
           text: this.$t("register_done", { email: this.form.email })
         }).show();
 
-        console.log("GO TO ACTIVATE");
-
         this.$router.push({ name: "activate_send" });
-       } catch (response) {
+      } catch (response) {
         this.loading = false;
-        if (response) {
-          if (response.data.errors) this.setErrors(response.data.errors);
-          else this.clearErrors();
+        if (response && response.data && response.data.errors) {
+          this.setErrors(response.data.errors);
+        } else {
+          this.clearErrors();
         }
       }
     },

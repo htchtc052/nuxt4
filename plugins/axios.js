@@ -10,14 +10,9 @@ export default ({
   redirect,
 }) => {
 
-  //срабатывает и на сервере и на клиенте. не нужен перехватчик на сервере. 
-  //тк токен и локаль к запросу на сервере добавляется в миддваре, тк серверный и клиентский axios по разному настраивается..
-  //кроме того перехватчик ответа с обработчиком ошибок не нужен на сервере
-
   axios.defaults.baseURL = process.env.apiURL
 
   if (process.server) {
-    console.log("axios server side return")
     return
   }
   console.log("axios client side")
@@ -28,7 +23,7 @@ export default ({
 
     const token = store.getters['auth/token']
 
-    console.log("axiois client intercept request", "retry", request._retry, "config", request, "token", token ? token : false)
+    console.log("axiois client intercept request", "token", token ? true : false)
 
     if (token) {
       request.headers['Authorization'] = "Bearer " + token
@@ -45,20 +40,17 @@ export default ({
   // Response interceptor
   axios.interceptors.response.use(response => {
 
-    console.log("axios success", response.headers.new_token)
+    console.log("axios success")
 
-    //const new_token = _.get(response.headers, 'new_token', null)
     const new_token = response.headers && response.headers.new_token ? response.headers.new_token : null
     console.log("axios sucess headers new_token", "new_token", new_token)
 
     if (new_token) {
       store.dispatch('auth/saveToken', new_token)
     }
-    console.log("axios sucess end handle response", response)
     return response;
 
   }, error => {
-    //const {status} = error.response || {}
     if (!error.response) {
       new app.Noty({
         type: 'error',
@@ -71,11 +63,10 @@ export default ({
     if (error.response.status != 500) {
 
       const new_token = error.response.headers && error.response.headers.new_token ? error.response.headers.new_token : null
-      console.log("axios  @@error new_token", "response", error.response.headers, "new_token", new_token)
+      console.log("axios error new_token", new_token)
       if (new_token) {
         store.dispatch('auth/saveToken', new_token)
       }
-      console.log("axios error end handle new token")
     }
 
     if (error.response.status >= 500) {
@@ -90,9 +81,6 @@ export default ({
         text: app.i18n.t("error_throttle")
       }).show()
       return Promise.reject()
-    } else if (error.response.status == 403) {
-      //console.log("status 403", error.response.data[0]);
-      return Promise.reject(error.response);
     } else if (error.response.status == 422 || error.response.status == 423) {
       return Promise.reject(error.response)
     } else if (error.response.status == 401) {
@@ -104,9 +92,25 @@ export default ({
       app.router.push({
         name: "login"
       })
-
-
       return Promise.reject()
+    } else if (error.response.status == 403) {
+      console.log("axios client intercept handle 403");
+      new app.Noty({
+        type: 'error',
+        text: app.i18n.t("error_forbidden")
+      }).show()
+    
+      if (store.getters["auth/check"]) {
+        app.router.push({
+          name: "profile"
+        })
+      } else {
+        app.router.push({
+          name: "login"
+        })
+      }
+      
+      return Promise.reject();
     }
   })
 }

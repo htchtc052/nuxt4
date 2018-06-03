@@ -1,6 +1,9 @@
-export default ({ store, redirect }) => {
-  console.log("auth middleware", store.getters['auth/check'])
+export default ({
+  store,
+  redirect
+}) => {
   if (!store.getters['auth/check']) {
-    //return redirect('/login')
+    console.log("auth middleware redirect")
+    return redirect('/login')
   }
 }

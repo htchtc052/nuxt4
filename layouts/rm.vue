@@ -48,20 +48,15 @@ export default {
     MainMenu,
     TopBanners
   },
-  computed: {
-  },
-  mounted: function() {
-   
-  },
-  methods: {
-  }
+  computed: {},
+  mounted: function() {},
+  methods: {}
 };
 </script>
 
 <style lang="scss">
-//@import '~bootstrap/scss/bootstrap.scss';
-@import '~sweetalert2/src/sweetalert2';
 @import "~/node_modules/vuejs-noty/dist/vuejs-noty.css";
 @import "~/assets/css/old_global.css";
 @import "~/assets/css/simple-line-icons.css";
+@import "~/node_modules/font-awesome/css/font-awesome.css";
 </style>

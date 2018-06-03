@@ -2,7 +2,7 @@ const webpack = require('webpack')
 
 module.exports = {
   env: {
-    apiURL: 'http://localhost:3004'
+    apiURL: 'http://localhost:8081'
   },
   head: {
     title: 'RealMusic',

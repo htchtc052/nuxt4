@@ -61,6 +61,16 @@
   "error_activate_set": "Ссылка активации устарела или неверная",
   "error_password_reset": "Ссылка смены пароля устарела или неверная",
   "success_email_set": "Успешно установлен новый email {email}",
-  "error_email_set": "Ссылка смены мейла устарела или неверная"
+  "error_email_set": "Ссылка смены мейла устарела или неверная",
+  "error_forbidden": "Действие не авторизованно",
+  "login_with": "Войти через",
+  "github": "GitHub",
+  "facebook": "Facebook",
+  "yandex": "Яндекс",
+  "google": "Google",
+  "vkontakte": "Вконтакте",
+  "odnoklassniki": "Одноклассники",
+  "mailru": "@mail.ru"
+
 
 }

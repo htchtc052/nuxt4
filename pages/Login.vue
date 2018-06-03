@@ -44,24 +44,25 @@
 					
 					
                 </div>
-							
-						</form>	
-
-
-					<!--	<login-social /> -->
+						</form>
+						<login-social /> 
 
 					</div>
 				</div>
-		
 </div>
 
 </template>
 
 <script>
 import axios from "axios";
+import LoginSocial from "~/components/LoginSocial.vue";
+
 export default {
   middleware: "guest",
   layout: "rm",
+  components: {
+    LoginSocial
+  },
   data() {
     return {
       loading: false,
@@ -76,44 +77,30 @@ export default {
     };
   },
   mounted() {
-    /*   if (this.$route.query.error_msg) {
-        console.log("login mounted error param", this.$route.query.error_msg)
-        new this.$noty({ type: "error", text: this.$t(this.$route.query.error_msg) }).show();
-    } */
+    if (this.$route.query.error_msg) {
+      new this.$noty({
+        type: "error",
+        text: this.$t(this.$route.query.error_msg)
+      }).show();
+      this.$router.push({ name: "login" });
+    }
   },
   methods: {
     async sendForm() {
       this.loading = true;
 
       try {
-       console.log(" login.vue before submit", axios.defaults.baseURL);
         const { data } = await axios.post("api/login", this.form);
-        this.$store.commit("auth/SET_USER", data.user)
-        console.log("login.vue  success after user")
-
-        
-          this.$store.commit("auth/SET_TOKEN", data.token)
-
-          this.$cookies.set('token', data.token, {
-            path: '/',
-            maxAge: 31536000
-          })
-          console.log("login.vue   success after token")
-
-        
+        this.$store.dispatch("auth/login", data);
+        //console.log("login.vue  success after login");
         this.loading = false;
-
         new this.$noty({ type: "success", text: this.$t("login_done") }).show();
 
-        console.log("login.vue GO TO PROFILE");
-
-        //this.$router.push({ name: "profile" });
         if (!this.$store.getters["auth/verified"]) {
-           this.$router.push({ name: "activate_send" });
+          this.$router.push({ name: "activate_send" });
         } else {
-         this.$router.push({ name: "profile" });
-        } 
-
+          this.$router.push({ name: "profile" });
+        }
       } catch (response) {
         this.loading = false;
         if (response && response.data && response.data.errors) {

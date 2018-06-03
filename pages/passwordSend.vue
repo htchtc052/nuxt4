@@ -30,11 +30,10 @@
 </template>
 
 <script>
-
 import axios from "axios";
 export default {
-  layout: 'rm',
-  middleware: 'guest',
+  layout: "rm",
+  middleware: "guest",
   computed: {},
   data() {
     return {
@@ -56,13 +55,12 @@ export default {
 
         this.clearErrors();
 
-		this.loading = false;
-		
+        this.loading = false;
+
         new this.$noty({
           type: "success",
           text: this.$t("password_send_done", { email: this.form.email })
-		}).show();
-		
+        }).show();
       } catch (errors) {
         this.loading = false;
         errors ? this.setErrors(errors) : this.clearErrors();

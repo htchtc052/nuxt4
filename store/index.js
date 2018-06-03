@@ -23,7 +23,7 @@ return new Vuex.Store({
         commit('lang/SET_LOCALE', {locale})
       }
 
-      console.log("nuxtServerInit token", token ? token : null, locale)
+      console.log("nuxtServerInit token", token ? true : false, "locale", locale ? locale : null)
 
     },
   },

@@ -58,7 +58,7 @@ import axios from "axios";
 let checked_token = false;
 
 export default {
-  layout: 'rm',
+  layout: "rm",
   computed: {},
   data() {
     return {
@@ -74,62 +74,53 @@ export default {
     };
   },
   mounted() {
-      console.log("passwordSend client mounted checked_token", this.checked_token)
-      if (!this.checked_token) {
-          new this.$noty({
-            type: "error",
-            text: this.$t("password_set_error")
-          }).show();
-          
-          this.$router.push({ name: "login" });
-      }
-      this.form.reset_password_token = this.$route.params.token,
-      this.form.email = this.$route.query.email
-    //console.log("mounted password set.vue", this)
+    console.log(
+      "passwordSend client mounted checked_token",
+      this.checked_token ? true : false
+    );
+
+    if (!this.checked_token) {
+      new this.$noty({
+        type: "error",
+        text: this.$t("password_set_error")
+      }).show();
+
+      this.$router.push({ name: "login" });
+    }
+    (this.form.reset_password_token = this.$route.params.token),
+      (this.form.email = this.$route.query.email);
   },
   methods: {
     async submit() {
       this.loading = true;
-      
-      await this.$store.dispatch("auth/logout")
+
+      await this.$store.dispatch("auth/logout");
 
       try {
-          const res = await axios.post("api/password_set", this.form);
-          console.log("passwordSend client submit ok", res.data)
-        
-          this.$store.dispatch("auth/saveToken", res.data.new_token);
+        console.log("passwordSet handleSuccess check");
 
-          await this.$store.dispatch("auth/fetchUser");
-          
-          this.loading = false;
+        const { data } = await axios.post("api/password_set", this.form);
+        console.log("passwordSend client submit ok", data);
+        this.$store.dispatch("auth/login", data);
 
-          new this.$noty({
-            type: "success",
-            text: this.$t("password_set_done")
-          }).show();
-        
-          this.$router.push({ name: "profile" });
-      
-      } catch (response) {
-        console.log("passwordSend client submit catch errors", response, "status", response.status)
         this.loading = false;
 
-        if (response.status == 403) {
-          new this.$noty({
-            type: "error",
-            text: this.$t("password_set_error")
-          }).show();
-          this.$router.push({ name: "login" });
+        new this.$noty({
+          type: "success",
+          text: this.$t("password_set_done")
+        }).show();
+
+        this.$router.push({ name: "profile" });
+      } catch (response) {
+        this.loading = false;
+        if (response && response.data && response.data.errors) {
+          this.setErrors(response.data.errors);
         } else {
-         // console.log("passwordSend errors", response.data.errors)
-          response.data.errors ? this.setErrors(response.data.errors) : this.clearErrors()
+          this.clearErrors();
         }
-      }  
-      
-     
+      }
     },
     setErrors(errors) {
-  
       this.error.password = errors.password ? errors.password[0] : null;
       this.error.confirm_password = errors.confirm_password
         ? errors.confirm_password[0]
@@ -138,32 +129,27 @@ export default {
     clearErrors() {
       this.error.password = null;
       this.error.confirm_password = null;
-    },
+    }
   },
   middleware: async ({ route, query, redirect, app }) => {
-     if (process.server) {
-      console.log("passwordSend midd process server", process.server)
-      
+    if (process.server) {
+      console.log("passwordSend midd server");
+
       try {
         const response = await axios.post("api/password_check_before_set", {
           reset_password_token: route.params.token,
           email: query.email
         });
-        console.log("passwordSend midd token ok", response.data)
-        checked_token = true
+        console.log("passwordSend midd server ok");
+        checked_token = true;
       } catch (error) {
-          console.log("passwordSend midd token error", error.response.data)
-          checked_token = false
-          //return redirect('/login?error_msg=error_password_reset')
+        console.log("passwordSend midd server error");
+        checked_token = false;
       }
-
-    
-    } 
+    }
   },
   asyncData() {
-    return  {checked_token}
+    return { checked_token };
   }
-
-
 };
 </script>
