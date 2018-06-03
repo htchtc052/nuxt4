@@ -38,6 +38,17 @@ export default {
       loading: false
     };
   },
+   mounted() {
+    if (this.$route.query.error_msg) {
+      new this.$noty({
+        type: "error",
+        text: this.$t(this.$route.query.error_msg)
+      }).show();
+      this.$router.push({ name: "activate_send" });
+    }
+
+  
+  },
   methods: {
     async submit() {
       this.loading = true;

@@ -55,8 +55,6 @@
 <script>
 import axios from "axios";
 
-let checked_token = false;
-
 export default {
   layout: "rm",
   computed: {},
@@ -74,19 +72,6 @@ export default {
     };
   },
   mounted() {
-    console.log(
-      "passwordSend client mounted checked_token",
-      this.checked_token ? true : false
-    );
-
-    if (!this.checked_token) {
-      new this.$noty({
-        type: "error",
-        text: this.$t("password_set_error")
-      }).show();
-
-      this.$router.push({ name: "login" });
-    }
     (this.form.reset_password_token = this.$route.params.token),
       (this.form.email = this.$route.query.email);
   },
@@ -94,10 +79,7 @@ export default {
     async submit() {
       this.loading = true;
 
-      await this.$store.dispatch("auth/logout");
-
       try {
-        console.log("passwordSet handleSuccess check");
 
         const { data } = await axios.post("api/password_set", this.form);
         console.log("passwordSend client submit ok", data);
@@ -131,9 +113,13 @@ export default {
       this.error.confirm_password = null;
     }
   },
-  middleware: async ({ route, query, redirect, app }) => {
+  middleware: async ({ route, query, redirect, store }) => {
     if (process.server) {
       console.log("passwordSend midd server");
+      if (store.getters["auth/check"]) {
+        console.log("passwordSend midd redirect auth to profile")
+        return redirect('/profile?error_msg=password_set_error')
+      }
 
       try {
         const response = await axios.post("api/password_check_before_set", {
@@ -141,15 +127,13 @@ export default {
           email: query.email
         });
         console.log("passwordSend midd server ok");
-        checked_token = true;
       } catch (error) {
         console.log("passwordSend midd server error");
-        checked_token = false;
+        return redirect('/login?error_msg=password_set_error')
+     
       }
     }
   },
-  asyncData() {
-    return { checked_token };
-  }
+
 };
 </script>

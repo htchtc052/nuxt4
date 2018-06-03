@@ -35,30 +35,43 @@
 </template>
 
 <script>
-	export default {
-		middleware: ["auth", "verified"],
-  		layout: "rm",
-		i18n: {
-			messages: {
-				en: { 
-					"title": "Profile",
-					"main": "Main",
-					"edit_info": "Edit user info",
-					"edit_password": "Edit password",
-					"edit_email": "Edit email",
-				},
-				ru: {
-					"title": "Профиль",
-					"main": "Главная",
-					"edit_info": "Изменить инфо",
-					"edit_password": "Изменить пароль",
-					"edit_email": "Изуменить email",
-				
-				}
-			}
-		},
-		
-
+export default {
+  middleware: ["auth", "verified"],
+  layout: "rm",
+  mounted() {
+    if (this.$route.query.error_msg) {
+      new this.$noty({
+        type: "error",
+        text: this.$t(this.$route.query.error_msg)
+      }).show();
+      this.$router.push({ name: "profile" });
 	}
 	
+	if (this.$route.query.msg) {
+      new this.$noty({
+        type: "success",
+        text: this.$t(this.$route.query.msg)
+      }).show();
+      this.$router.push({ name: "profile" });
+    }
+  },
+  i18n: {
+    messages: {
+      en: {
+        title: "Profile",
+        main: "Main",
+        edit_info: "Edit user info",
+        edit_password: "Edit password",
+        edit_email: "Edit email"
+      },
+      ru: {
+        title: "Профиль",
+        main: "Главная",
+        edit_info: "Изменить инфо",
+        edit_password: "Изменить пароль",
+        edit_email: "Изуменить email"
+      }
+    }
+  }
+};
 </script>
