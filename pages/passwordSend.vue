@@ -61,9 +61,13 @@ export default {
           type: "success",
           text: this.$t("password_send_done", { email: this.form.email })
         }).show();
-      } catch (errors) {
+       } catch (response) {
         this.loading = false;
-        errors ? this.setErrors(errors) : this.clearErrors();
+        if (response && response.data && response.data.errors) {
+          this.setErrors(response.data.errors);
+        } else {
+          this.clearErrors();
+        }
       }
     },
     setErrors(errors) {
