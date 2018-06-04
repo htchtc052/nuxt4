@@ -8,16 +8,16 @@
 			<div class="col-12 col-md-3">
 				<nav class="nav flex-column nav-pills mb-4">
 					<router-link :to="{name: 'profile'}" class="nav-link" activeClass="active" exact>
-						{{ $t('main') }}
+						{{ $t('profile_main') }}
 					</router-link>
 					<router-link :to="{name: 'profile.editProfile'}" class="nav-link" activeClass="active" exact>
-						{{ $t('edit_info') }}
+						{{ $t('profile_edit_info') }}
 					</router-link>
 					<router-link :to="{name: 'profile.editPassword'}" class="nav-link" activeClass="active" exact>
-						{{ $t('edit_password') }}
+						{{ $t('profile_edit_password') }}
 					</router-link>
 					<!-- <router-link :to="{name: 'profile.editEmail'}" class="nav-link" activeClass="active" exact>
-						{{ $t('edit_email') }}
+						{{ $t('profile_edit_email') }}
 					</router-link>
 					-->
 				</nav>
@@ -53,24 +53,6 @@ export default {
         text: this.$t(this.$route.query.msg)
       }).show();
       this.$router.push({ name: "profile" });
-    }
-  },
-  i18n: {
-    messages: {
-      en: {
-        title: "Profile",
-        main: "Main",
-        edit_info: "Edit user info",
-        edit_password: "Edit password",
-        edit_email: "Edit email"
-      },
-      ru: {
-        title: "Профиль",
-        main: "Главная",
-        edit_info: "Изменить инфо",
-        edit_password: "Изменить пароль",
-        edit_email: "Изуменить email"
-      }
     }
   }
 };

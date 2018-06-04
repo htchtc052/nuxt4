@@ -13,37 +13,62 @@
 </template>
 <script>
 import axios from "axios";
+
+let server_ok = false;
+
 export default {
   layout: "rm",
-  computed: {},
   data() {
     return {
+      loading: false,
     };
   },
   async mounted() {
-    console.log("activateSend mounted");
-   
+    console.log("activateSend mounted server_ok", this.server_ok);
+    this.loading = true;
+    if (this.server_ok) {
+      this.loading = false;
+
+      new this.$noty({
+        type: "success",
+        text: this.$t("activate_set_done")
+      }).show();
+
+      this.$router.push({ name: "profile" });
+    } else {
+      console.log("activateSet fail");
+
+      new this.$noty({
+        type: "error",
+        text: this.$t("activate_set_error")
+      }).show();
+
+      this.loading = false;
+      if (this.$store.getters["auth/check"])
+        this.$router.push({ name: "profile" });
+      else this.$router.push({ name: "login" });
+    }
   },
   middleware: async ({ route, query, redirect, app, store }) => {
     if (process.server) {
-      console.log("activateSend midd server", route.params.token);
+      console.log("activateSend midd server");
 
       try {
         const response = await axios.post("api/activate_set", {
           activate_token: route.params.token
         });
-        console.log("activateSet midd ok");
+        console.log("activateSend midd token ok");
+
         store.dispatch("auth/login", response.data);
-        return redirect("/profile?msg=activate_set_done");
+        server_ok = true;
       } catch (error) {
-        console.log("activateSet midd error");
-        if (store.getters["auth/check"])
-          if (store.getters["auth/verified"])
-            return redirect("/profile?error_msg=activate_set_error");
-          else return redirect("/activate_send?error_msg=activate_set_error");
-        else return redirect("/login?error_msg=activate_set_error");
+        server_ok = false;
+        console.log("activateSend midd token error");
       }
     }
+  },
+  asyncData() {
+    return { server_ok };
   }
 };
 </script>

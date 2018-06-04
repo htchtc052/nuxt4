@@ -30,6 +30,7 @@ module.exports = {
   loading: { color: '#3B8070' },
   modules: [
     '@nuxtjs/router',
+    //'@nuxtjs/axios',
     ['cookie-universal-nuxt', { parseJSON: false }],
 
   ],

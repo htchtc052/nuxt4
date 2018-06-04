@@ -18,13 +18,14 @@
     "npm": "5.6.0"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.3.1",
     "@nuxtjs/bootstrap-vue": "^2.0.4",
-    "font-awesome": "^4.7.0",
-    "font-awesome-sass-loader": "^2.0.1",
     "@nuxtjs/router": "^1.0.1",
     "axios": "^0.17.1",
     "bootstrap": "^4.0.0",
     "cookie-universal-nuxt": "^2.0.3",
+    "font-awesome": "^4.7.0",
+    "font-awesome-sass-loader": "^2.0.1",
     "howler": "^2.0.10",
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",

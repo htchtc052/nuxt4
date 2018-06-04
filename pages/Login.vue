@@ -38,10 +38,11 @@
 								<div class="form-group">
 										<div><nuxt-link :to="{ name: 'password_send'}">{{ $t('forgot_password') }}</nuxt-link></div>
                     <div><nuxt-link :to="{ name: 'register' }">{{ $t('register_title') }}</nuxt-link></div>
+                    <!--
                     <div><nuxt-link :to="{ name: 'password_set', params: { token: 'test' } }">{{ $t('password_set_title') }}</nuxt-link></div>
                     <div><nuxt-link :to="{ name: 'profile' }">Profile</nuxt-link></div>
                     <div><a  href="/">Main page</a></div>
-					
+                    -->
 					
                 </div>
 						</form>

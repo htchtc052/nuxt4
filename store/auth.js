@@ -31,7 +31,8 @@ const mutations = {
 }
 
 const actions = {
-  async fetchUser({
+
+  async serverFetchUser({
     commit,
     dispatch,
     getters
@@ -48,12 +49,12 @@ const actions = {
       console.log("store auth  success new_token", new_token ? true : false)
       
       if (new_token) {
+        console.log("store auth save new_token", new_token ? true : false)
         dispatch("saveToken", new_token)
       }
       return Promise.resolve()
 
     } catch (error) {
-      console.log("store auth error fetch ");
       console.log("store auth error msg ", error.response && error.response.data ? error.response.data : error)
       dispatch('logout')
       return Promise.reject()

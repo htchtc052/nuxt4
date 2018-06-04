@@ -1,9 +1,16 @@
 export default async ({ store, req, redirect, route }) => {
+  
+  console.log("check-auth midd", "isServer", process.server ? true : false)
+  if (!process.server) {
+    console.log("check-auth midd only on server side")
+    return
+  }
+
   if (process.server && !req) {
     return
   }
 
-  if (process.server && route.path == "/social_login") {
+  if (route.path == "/social_login") {
     const token = route.query.token
     if (!token) {
       return redirect('/login?error_msg=error_social')
@@ -13,13 +20,13 @@ export default async ({ store, req, redirect, route }) => {
   }
 
   if (!store.getters['auth/check'] && store.getters['auth/token']) {
-    console.log("check-auth midd before fetch user", "isServer", process.server ? true : false)
-      try {
-        await store.dispatch('auth/fetchUser')
-      } catch (errors) {
-        console.log("check-auth fetchUser error")
-        return redirect('/login')
-      }
+    
+        try {
+          await store.dispatch('auth/serverFetchUser')
+        } catch (errors) {
+          console.log("check-auth fetchUser error")
+          return redirect('/login')
+        }
   
   }
 }
