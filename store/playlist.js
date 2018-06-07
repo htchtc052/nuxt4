@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import VueHowler from 'vue-howler'
 import tracksHelper from "~/plugins/tracksHelper"
 
 const state = () => ({

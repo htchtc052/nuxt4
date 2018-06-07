@@ -1,5 +1,4 @@
 import Vuex from 'vuex'
-import Cookies from 'js-cookie'
 import {  cookieFromRequest } from '~/utils'
 import playlist from '~/store/playlist'
 import lang from '~/store/lang'
