@@ -91,9 +91,10 @@ export default {
       this.loading = true;
 
       try {
-        const { data } = await axios.post("api/login", this.form);
+        const data  = await this.$axios.$post("api/login", this.form);
+        
         this.$store.dispatch("auth/login", data);
-        //console.log("login.vue  success after login");
+        //this.$store.dispatch("auth/saveToken", data.token);
         this.loading = false;
         new this.$noty({ type: "success", text: this.$t("login_done") }).show();
 
@@ -102,10 +103,10 @@ export default {
         } else {
           this.$router.push({ name: "profile" });
         }
-      } catch (response) {
+       } catch (resp) {
         this.loading = false;
-        if (response && response.data && response.data.errors) {
-          this.setErrors(response.data.errors);
+        if (resp && resp.errors) {
+          this.setErrors(resp.errors);
         } else {
           this.clearErrors();
         }

@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   layout: "rm",
   middleware: "guest",
@@ -51,7 +50,7 @@ export default {
       this.loading = true;
 
       try {
-        const res = await axios.post("api/password_send_email", this.form);
+        await this.$axios.$post("api/password_send_email", this.form);
 
         this.clearErrors();
 
@@ -61,10 +60,10 @@ export default {
           type: "success",
           text: this.$t("password_send_done", { email: this.form.email })
         }).show();
-       } catch (response) {
+      } catch (resp) {
         this.loading = false;
-        if (response && response.data && response.data.errors) {
-          this.setErrors(response.data.errors);
+        if (resp && resp.errors) {
+          this.setErrors(resp.errors);
         } else {
           this.clearErrors();
         }

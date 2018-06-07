@@ -20,11 +20,6 @@
 import { mapGetters } from "vuex";
 
 export default {
-  // middleware: ["auth", "verified"],
-  
-  mounted() {
-   
-  },
   computed: mapGetters({
     user: "auth/user"
   }),

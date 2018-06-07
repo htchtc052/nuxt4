@@ -4,6 +4,6 @@ export default ({
 }) => {
   if (store.getters['auth/verified']) {
     console.log("not_verified middleware redirect")
-    return redirect('/profile')
+    //return redirect('/profile')
   }
 }

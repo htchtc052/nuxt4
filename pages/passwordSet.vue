@@ -53,8 +53,6 @@
 
 </template>
 <script>
-import axios from "axios";
-
 export default {
   layout: "rm",
   computed: {},
@@ -80,8 +78,7 @@ export default {
       this.loading = true;
 
       try {
-
-        const { data } = await axios.post("api/password_set", this.form);
+        const data = await this.$axios.$post("api/password_set", this.form);
         console.log("passwordSend client submit ok", data);
         this.$store.dispatch("auth/login", data);
 
@@ -93,10 +90,10 @@ export default {
         }).show();
 
         this.$router.push({ name: "profile" });
-      } catch (response) {
+      } catch (resp) {
         this.loading = false;
-        if (response && response.data && response.data.errors) {
-          this.setErrors(response.data.errors);
+        if (resp && resp.errors) {
+          this.setErrors(resp.errors);
         } else {
           this.clearErrors();
         }
@@ -113,27 +110,24 @@ export default {
       this.error.confirm_password = null;
     }
   },
-  middleware: async ({ route, query, redirect, store }) => {
+  middleware: async ({ app, query, route, redirect, store }) => {
     if (process.server) {
       console.log("passwordSend midd server");
-      if (store.getters["auth/check"]) {
-        console.log("passwordSend midd redirect auth to profile")
-        return redirect('/profile?error_msg=password_set_error')
-      }
 
       try {
-        const response = await axios.post("api/password_check_before_set", {
-          reset_password_token: route.params.token,
-          email: query.email
-        });
-        console.log("passwordSend midd server ok");
+        const response = await app.$axios.$post(
+          "api/password_check_before_set",
+          {
+            reset_password_token: route.params.token,
+            email: query.email
+          }
+        );
+        console.log("passwordSend midd server ok", response);
       } catch (error) {
-        console.log("passwordSend midd server error");
-        return redirect('/login?error_msg=password_set_error')
-     
+        console.log("passwordSend midd server error", error ? true : false, error);
+        //return redirect("/login?error_msg=password_set_error");
       }
     }
-  },
-
+  }
 };
 </script>

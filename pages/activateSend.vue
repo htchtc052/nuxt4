@@ -22,7 +22,6 @@
 
 <script>
 
-import axios from "axios";
 import { mapGetters } from "vuex";
 
 export default {
@@ -54,7 +53,7 @@ export default {
       this.loading = true;
 
       try {
-        const res = await axios.post("api/activate_send_email");
+        await this.$axios.$post("api/activate_send_email");
         this.loading = false;
         new this.$noty({
           type: "success",

@@ -92,8 +92,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 import LoginSocial from "~/components/LoginSocial.vue";
 
 export default {
@@ -127,7 +125,8 @@ export default {
 
       try {
         // console.log(" register.vue before submit");
-        const { data } = await axios.post("api/register", this.form);
+				const  data = await this.$axios.$post("api/register", this.form);
+				console.log("register.vue after post", data)
         this.$store.dispatch("auth/login", data);
         this.loading = false;
 
@@ -137,10 +136,10 @@ export default {
         }).show();
 
         this.$router.push({ name: "activate_send" });
-      } catch (response) {
+       } catch (resp) {
         this.loading = false;
-        if (response && response.data && response.data.errors) {
-          this.setErrors(response.data.errors);
+        if (resp && resp.errors) {
+          this.setErrors(resp.errors);
         } else {
           this.clearErrors();
         }

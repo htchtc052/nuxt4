@@ -19,7 +19,9 @@ import ActivateSend from '~/pages/activateSend.vue'
 import PasswordSend from '~/pages/passwordSend.vue'
 import PasswordSet from '~/pages/passwordSet.vue'
 import ActivateSet from '~/pages/activateSet.vue'
-
+import Error500 from '~/pages/errors/500.vue'
+import Error403 from '~/pages/errors/403.vue'
+import Error404 from '~/pages/errors/404.vue'
 
 const routes = [{
     path: '/',
@@ -98,14 +100,33 @@ const routes = [{
       				name: 'profile.editEmail',
       				component: EditEmail,
       			}, */
-      {
-        path: '*',
-        redirect: {
-          name: 'profile'
-        }
-      }
+     
     ]
   },
+ /*  {
+    path: '/error500',
+    name: 'error500',
+    component: Error500
+  },
+  {
+    path: '/error403',
+    name: 'error403',
+    component: Error403
+  },
+  
+  {
+    path: '/error404',
+    name: 'error404',
+    component: Error404
+  },
+  {
+    path: '*',
+    redirect: {
+      name: 'error404'
+    }
+  } */
+
+
 
 ]
 

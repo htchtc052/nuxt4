@@ -12,7 +12,6 @@
 
 </template>
 <script>
-import axios from "axios";
 
 let server_ok = false;
 
@@ -24,7 +23,7 @@ export default {
     };
   },
   async mounted() {
-    console.log("activateSend mounted server_ok", this.server_ok);
+    console.log("activateSet mounted server_ok", this.server_ok);
     this.loading = true;
     if (this.server_ok) {
       this.loading = false;
@@ -50,20 +49,21 @@ export default {
     }
   },
   middleware: async ({ route, query, redirect, app, store }) => {
+     console.log("activateSet midd ");
     if (process.server) {
-      console.log("activateSend midd server");
+      console.log("activateSet midd server");
 
       try {
-        const response = await axios.post("api/activate_set", {
+        const data = await app.$axios.$post("api/activate_set", {
           activate_token: route.params.token
         });
-        console.log("activateSend midd token ok");
+        console.log("activateSet midd token ok", data);
 
-        store.dispatch("auth/login", response.data);
+        store.dispatch("auth/login", data);
         server_ok = true;
       } catch (error) {
         server_ok = false;
-        console.log("activateSend midd token error");
+        console.log("activateSet midd token error", error  ? error : null)
       }
     }
   },

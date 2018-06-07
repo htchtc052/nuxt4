@@ -1,6 +1,3 @@
-import axios from 'axios'
-import Cookies from 'js-cookie'
-
 const state = () => ({
   user: null,
   token: null
@@ -32,31 +29,17 @@ const mutations = {
 
 const actions = {
 
-  async serverFetchUser({
+  async fetchUser({
     commit,
     dispatch,
     getters
   }) {
     try {
-      const {  data, headers } = await axios.get("api/user", {
-        params: {
-          token: getters['token']
-        }
-      })
+      const data =  await this.$axios.$get("api/user")
+      console.log("store fetch user", data)
       commit("SET_USER", data.user)
-      
-      const new_token = headers && headers.new_token ? headers.new_token : null
-      console.log("store auth  success new_token", new_token ? true : false)
-      
-      if (new_token) {
-        console.log("store auth save new_token", new_token ? true : false)
-        dispatch("saveToken", new_token)
-      }
       return Promise.resolve()
-
-    } catch (error) {
-      console.log("store auth error msg ", error.response && error.response.data ? error.response.data : error)
-      dispatch('logout')
+    } catch (errors) {
       return Promise.reject()
     }
   },

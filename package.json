@@ -20,8 +20,9 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.1",
     "@nuxtjs/bootstrap-vue": "^2.0.4",
+    "@nuxtjs/proxy": "^1.2.4",
     "@nuxtjs/router": "^1.0.1",
-    "axios": "^0.17.1",
+    "axios": "^0.18.0",
     "bootstrap": "^4.0.0",
     "cookie-universal-nuxt": "^2.0.3",
     "font-awesome": "^4.7.0",

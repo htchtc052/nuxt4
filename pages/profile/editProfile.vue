@@ -30,7 +30,6 @@
 </template>
 <script>
 import { mapState, mapGetters } from "vuex";
-import axios from "axios";
 
 export default {
   //middleware: "auth",
@@ -58,7 +57,7 @@ export default {
     async submit() {
       this.loading = true;
       try {
-        const res = await axios.post("api/user/update", this.form);
+        await this.$axios.$post("api/user/update", this.form);
 
         this.user.name = this.form.name;
 
@@ -70,10 +69,10 @@ export default {
         }).show();
 
         this.$router.push({ name: "profile" });
-      } catch (response) {
+      } catch (resp) {
         this.loading = false;
-        if (response && response.data && response.data.errors) {
-          this.setErrors(response.data.errors);
+        if (resp && resp.errors) {
+          this.setErrors(resp.errors);
         } else {
           this.clearErrors();
         }

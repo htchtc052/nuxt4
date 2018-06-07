@@ -43,8 +43,6 @@
 
 </template>
 <script>
-import { api } from "../../../config";
-
 import { mapGetters } from "vuex";
 
 export default {

@@ -5,6 +5,6 @@ export default ({
   console.log("guest middleware")
   if (store.getters['auth/check']) {
     console.log("guest middleware redirect")
-    return redirect('/profile')
+    //return redirect('/profile')
   }
 }

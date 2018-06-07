@@ -10,7 +10,7 @@ import auth from '~/store/auth'
 const createStore = () => {
 return new Vuex.Store({
   actions: {
-    nuxtServerInit({commit}, {req}) {
+    nuxtServerInit({commit}, {app, req}) {
       const token = cookieFromRequest(req, 'token')
       if (token) {
         commit('auth/SET_TOKEN', token)

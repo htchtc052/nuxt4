@@ -42,7 +42,6 @@
 
 </template>
 <script>
-import axios from "axios";
 export default {
   computed: {},
   metaInfo() {},
@@ -63,7 +62,7 @@ export default {
     async submit() {
       this.loading = true;
       try {
-        const res = await axios.post("api/user/password", this.form);
+        await this.$axios.$post("api/user/password", this.form);
 
         this.loading = false;
 
@@ -73,11 +72,12 @@ export default {
         }).show();
 
         this.$router.push({ name: "profile" });
-       } catch (response) {
+      } catch (resp) {
         this.loading = false;
-        if (response) {
-          if (response.data.errors) this.setErrors(response.data.errors);
-          else this.clearErrors();
+        if (resp && resp.errors) {
+          this.setErrors(resp.errors);
+        } else {
+          this.clearErrors();
         }
       }
     },

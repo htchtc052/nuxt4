@@ -39,13 +39,14 @@ export default {
   middleware: ["auth", "verified"],
   layout: "rm",
   mounted() {
-    if (this.$route.query.error_msg) {
+/*     if (this.$route.query.error_msg) {
       new this.$noty({
         type: "error",
         text: this.$t(this.$route.query.error_msg)
       }).show();
       this.$router.push({ name: "profile" });
-	}
+  	}
+	 */
 	
 	if (this.$route.query.msg) {
       new this.$noty({
