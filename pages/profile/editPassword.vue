@@ -65,12 +65,7 @@ export default {
         await this.$axios.$post("api/user/password", this.form);
 
         this.loading = false;
-
-        new this.$noty({
-          type: "success",
-          text: this.$t("edit_password_done")
-        }).show();
-
+        this.$toast.success(this.$t("edit_password_done"));
         this.$router.push({ name: "profile" });
       } catch (resp) {
         this.loading = false;

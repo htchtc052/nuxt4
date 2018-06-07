@@ -12,14 +12,13 @@
 
 </template>
 <script>
-
 let server_ok = false;
 
 export default {
   layout: "rm",
   data() {
     return {
-      loading: false,
+      loading: false
     };
   },
   async mounted() {
@@ -28,28 +27,22 @@ export default {
     if (this.server_ok) {
       this.loading = false;
 
-      new this.$noty({
-        type: "success",
-        text: this.$t("activate_set_done")
-      }).show();
+      this.$toast.success(this.$t("activate_set_done"));
 
       this.$router.push({ name: "profile" });
     } else {
       console.log("activateSet fail");
-
-      new this.$noty({
-        type: "error",
-        text: this.$t("activate_set_error")
-      }).show();
+/* 
+      this.$toast.error(app.i18n.t("activate_set_error"));
 
       this.loading = false;
       if (this.$store.getters["auth/check"])
         this.$router.push({ name: "profile" });
-      else this.$router.push({ name: "login" });
+      else this.$router.push({ name: "login" }); */
     }
   },
   middleware: async ({ route, query, redirect, app, store }) => {
-     console.log("activateSet midd ");
+    console.log("activateSet midd ");
     if (process.server) {
       console.log("activateSet midd server");
 
@@ -63,7 +56,7 @@ export default {
         server_ok = true;
       } catch (error) {
         server_ok = false;
-        console.log("activateSet midd token error", error  ? error : null)
+        console.log("activateSet midd token error", error ? error : null);
       }
     }
   },

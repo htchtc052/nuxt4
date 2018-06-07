@@ -56,10 +56,8 @@ export default {
 
         this.loading = false;
 
-        new this.$noty({
-          type: "success",
-          text: this.$t("password_send_done", { email: this.form.email })
-        }).show();
+        this.$toast.success(this.$t("password_send_done", { email: this.form.email }));
+   
       } catch (resp) {
         this.loading = false;
         if (resp && resp.errors) {

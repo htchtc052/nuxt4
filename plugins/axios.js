@@ -21,43 +21,42 @@ export default function ({
   })
 
   $axios.onError(error => {
-      if (error.response) {
-        const new_token = error.response.headers && error.response.headers.new_token ? error.response.headers.new_token : null
+    if (error.response) {
+      const new_token = error.response.headers && error.response.headers.new_token ? error.response.headers.new_token : null
 
-        console.log("$axios error", "new_token", new_token ? new_token : null)
-        if (new_token) {
-          console.log("$axios error set new token")
-          store.dispatch('auth/saveToken', new_token)
+      console.log("$axios error", "new_token", new_token ? new_token : null)
+      if (new_token) {
+        store.dispatch('auth/saveToken', new_token)
+      }
+
+      if (error.response.status == 401) {
+        console.log("$axios 401")
+        store.dispatch("auth/logout")
+
+        if (process.server) {
+          redirect("/login?error_msg=error_token_expired");
+
+        } else {
+          app.$toast.error(app.i18n.t("error_token_expired"))
+          
+          app.router.push({
+            name: "login"
+          })
+
         }
 
-        if (error.response.status == 401) {
-          console.log("$axios 4013")
-          app.$cookies.remove('token')
-          if (process.server) {
-            redirect("/login?error_msg=error_token_expired");
+        return Promise.reject()
 
-          } else {
-            new app.Noty({
-              type: 'error',
-              text: app.i18n.t("error_token_expired")
-            }).show()
-            app.router.push({
-              name: "login"
-            })
-
-          }
-        } else if (error.response.status == 403) {
-          console.log("$axios 403")
-          if (process.server) {
-            app.context.error({
-              statusCode: 403,
-              message: app.i18n.t("error_forbidden")
-            })
+      } else if (error.response.status == 403) {
+        console.log("$axios 403")
+        if (process.server) {
+          app.context.error({
+            statusCode: 403,
+            message: app.i18n.t("error_forbidden")
+          })
         } else {
-          new app.Noty({
-            type: 'error',
-            text: app.i18n.t("error_forbidden")
-          }).show()
+
+          app.$toast.error(app.i18n.t("error_forbidden"))
         }
         return Promise.reject()
       } else if (error.response.status == 422) {
@@ -71,22 +70,19 @@ export default function ({
         message: app.i18n.t("error_server")
       })
     } else {
-      new app.Noty({
-        type: 'error',
-        text: app.i18n.t("error_server")
-      }).show()
+      app.$toast.error(app.i18n.t("error_server"))
     }
 
     return Promise.reject(error);
   })
 
-$axios.onResponse(response => {
-  const new_token = response.headers && response.headers.new_token ? response.headers.new_token : null
-  console.log("$axios response", "new_token", new_token ? new_token : null)
+  $axios.onResponse(response => {
+    const new_token = response.headers && response.headers.new_token ? response.headers.new_token : null
+    console.log("$axios response", "new_token", new_token ? new_token : null)
 
-  if (new_token) {
-    store.dispatch('auth/saveToken', new_token)
-  }
+    if (new_token) {
+      store.dispatch('auth/saveToken', new_token)
+    }
 
-})
+  })
 }

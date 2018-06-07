@@ -7,10 +7,6 @@ export default async ({
 }) => {
 
   console.log("check-auth midd", "isServer", process.server ? true : false)
-/*   if (!process.server) {
-    console.log("check-auth midd only on server side")
-    return
-  } */
 
   if (process.server && !req) {
     return
@@ -31,6 +27,6 @@ export default async ({
     } catch (errors) {
        console.log("check-auth fetchUser errors", errors && errors.response ? errors.response : null)
     }
-    console.log("check-auth after ftc")
+    //console.log("check-auth after ftc")
   }
 }

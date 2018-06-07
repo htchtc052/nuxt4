@@ -63,10 +63,7 @@ export default {
 
         this.loading = false;
 
-        new this.$noty({
-          type: "success",
-          text: this.$t("edit_profile_done")
-        }).show();
+        this.$toast.success(this.$t("edit_profile_done"));
 
         this.$router.push({ name: "profile" });
       } catch (resp) {

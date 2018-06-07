@@ -36,7 +36,7 @@ const actions = {
   }) {
     try {
       const data =  await this.$axios.$get("api/user")
-      console.log("store fetch user", data)
+      console.log("store fetch user", data.user.email)
       commit("SET_USER", data.user)
       return Promise.resolve()
     } catch (errors) {

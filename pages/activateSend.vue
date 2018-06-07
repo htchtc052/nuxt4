@@ -38,14 +38,7 @@ export default {
     };
   },
    mounted() {
-    if (this.$route.query.error_msg) {
-      new this.$noty({
-        type: "error",
-        text: this.$t(this.$route.query.error_msg)
-      }).show();
-      this.$router.push({ name: "activate_send" });
-    }
-
+    
   
   },
   methods: {
@@ -55,10 +48,7 @@ export default {
       try {
         await this.$axios.$post("api/activate_send_email");
         this.loading = false;
-        new this.$noty({
-          type: "success",
-          text: this.$t("activate_send_done", {email: this.user.email})
-        }).show();
+        this.$toast.sucess(this.$t("activate_send_done", {email: this.user.email})).show();
       } catch (errors) {
         this.loading = false;
       }

@@ -129,12 +129,7 @@ export default {
 				console.log("register.vue after post", data)
         this.$store.dispatch("auth/login", data);
         this.loading = false;
-
-        new this.$noty({
-          type: "success",
-          text: this.$t("register_done", { email: this.form.email })
-        }).show();
-
+        this.$toast.success(this.$t("register_done", { email: this.form.email }));
         this.$router.push({ name: "activate_send" });
        } catch (resp) {
         this.loading = false;

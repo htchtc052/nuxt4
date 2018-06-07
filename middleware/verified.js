@@ -4,6 +4,6 @@ export default ({
 }) => {
   if (!store.getters['auth/verified']) {
     console.log("verified middleware redirect")
-    //return redirect('/activate_send')
+    return redirect('/activate_send')
   }
 }

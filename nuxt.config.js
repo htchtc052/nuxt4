@@ -53,21 +53,29 @@ module.exports = {
     color: '#3B8070'
   },
   modules: [
+    '@nuxtjs/toast',
     '@nuxtjs/router',
     '@nuxtjs/axios', ['cookie-universal-nuxt', {
       parseJSON: false
     }],
 
   ],
+  toast: {
+    position: 'top-center',
+    duration: 2000,
+    fullWidth: false,
+    closeOnSwipe: true,
+  },
   axios: {
     proxyHeaders: false,
     baseURL: 'http://localhost:8081',
     browserBaseUrl: 'http://localhost:8081',
   },
-  plugins: [{
+  plugins: [
+  /*   {
       src: '~/plugins/vuejs-noty',
       ssr: false
-    },
+    }, */
     {
       src: '~plugins/i18n',
       ssr: true
@@ -76,6 +84,8 @@ module.exports = {
       src: '~plugins/axios',
       ssr: true
     },
+    
+    
     {
       src: '~plugins/tracksHelper.js',
       ssr: false

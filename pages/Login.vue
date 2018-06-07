@@ -79,10 +79,7 @@ export default {
   },
   mounted() {
     if (this.$route.query.error_msg) {
-      new this.$noty({
-        type: "error",
-        text: this.$t(this.$route.query.error_msg)
-      }).show();
+      this.$toast.error(this.$t(this.$route.query.error_msg))
       this.$router.push({ name: "login" });
     }
   },
@@ -96,7 +93,8 @@ export default {
         this.$store.dispatch("auth/login", data);
         //this.$store.dispatch("auth/saveToken", data.token);
         this.loading = false;
-        new this.$noty({ type: "success", text: this.$t("login_done") }).show();
+
+        this.$toast.success(this.$t("login_done") )
 
         if (!this.$store.getters["auth/verified"]) {
           this.$router.push({ name: "activate_send" });
@@ -104,6 +102,7 @@ export default {
           this.$router.push({ name: "profile" });
         }
        } catch (resp) {
+         console.log("resp", resp)
         this.loading = false;
         if (resp && resp.errors) {
           this.setErrors(resp.errors);

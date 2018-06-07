@@ -84,10 +84,7 @@ export default {
 
         this.loading = false;
 
-        new this.$noty({
-          type: "success",
-          text: this.$t("password_set_done")
-        }).show();
+        this.$toast.success(this.$t("password_set_done"));
 
         this.$router.push({ name: "profile" });
       } catch (resp) {
@@ -124,7 +121,11 @@ export default {
         );
         console.log("passwordSend midd server ok", response);
       } catch (error) {
-        console.log("passwordSend midd server error", error ? true : false, error);
+        console.log(
+          "passwordSend midd server error",
+          error ? true : false,
+          error
+        );
         //return redirect("/login?error_msg=password_set_error");
       }
     }
