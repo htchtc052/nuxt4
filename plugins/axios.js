@@ -55,23 +55,7 @@ export default function ({
       store.dispatch("auth/logout")
       return Promise.reject()
     } 
-    
-    /* else if (error.response.status == 403) {
-      console.log("$axios 403")
-      if (process.server) {
-        app.context.error({
-          statusCode: 403,
-          message: app.i18n.t("error_forbidden")
-        })
-      } else {
-
-        app.$toast.error(app.i18n.t("error_forbidden"))
-      }
-      return Promise.reject()
-    } else if (error.response.status == 422) {
-      return Promise.reject(error.response.data)
-    }
- */
+  
     return Promise.reject(error);
   })
 
