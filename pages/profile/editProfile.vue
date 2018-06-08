@@ -66,10 +66,15 @@ export default {
         this.$toast.success(this.$t("edit_profile_done"));
 
         this.$router.push({ name: "profile" });
-      } catch (resp) {
+      } catch (error) {
+        console.log("resp", error.response.data.errors);
         this.loading = false;
-        if (resp && resp.errors) {
-          this.setErrors(resp.errors);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          this.setErrors(error.response.data.errors);
         } else {
           this.clearErrors();
         }

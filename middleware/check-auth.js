@@ -25,7 +25,7 @@ export default async ({
     try {
       await store.dispatch('auth/fetchUser')
     } catch (errors) {
-       console.log("check-auth fetchUser errors", errors && errors.response ? errors.response : null)
+       console.log("check-auth fetchUser errors", errors && errors.response ? errors.response : errors)
     }
     //console.log("check-auth after ftc")
   }

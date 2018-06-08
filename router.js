@@ -10,7 +10,6 @@ import IndexPage from '~/pages/index.vue'
 import PageDetail from '~/pages/pages/_id.vue'
 import Login from '~/pages/login.vue'
 import Register from '~/pages/register.vue'
-import Slova from '~/pages/slova.vue'
 import ProfileWrapper from '~/pages/profile/profileWrapper.vue'
 import Profile from '~/pages/profile/profile.vue'
 import EditProfile from '~/pages/profile/editProfile.vue'
@@ -19,9 +18,8 @@ import ActivateSend from '~/pages/activateSend.vue'
 import PasswordSend from '~/pages/passwordSend.vue'
 import PasswordSet from '~/pages/passwordSet.vue'
 import ActivateSet from '~/pages/activateSet.vue'
-import Error500 from '~/pages/errors/500.vue'
-import Error403 from '~/pages/errors/403.vue'
-import Error404 from '~/pages/errors/404.vue'
+import Music from '~/pages/music.vue'
+import Lyrics from '~/pages/lyrics.vue'
 
 const routes = [{
     path: '/',
@@ -44,9 +42,14 @@ const routes = [{
     component: Register
   },
   {
-    path: '/slova',
-    name: 'slova',
-    component: Slova
+    path: '/music',
+    name: 'music',
+    component: Music
+  },
+  {
+    path: '/lyrics',
+    name: 'lyrics',
+    component: Lyrics
   },
   {
     path: '/activate_send',
@@ -100,57 +103,18 @@ const routes = [{
       				name: 'profile.editEmail',
       				component: EditEmail,
       			}, */
-     
+
     ]
   },
- /*  {
-    path: '/error500',
-    name: 'error500',
-    component: Error500
-  },
-  {
-    path: '/error403',
-    name: 'error403',
-    component: Error403
-  },
-  
-  {
-    path: '/error404',
-    name: 'error404',
-    component: Error404
-  },
-  {
-    path: '*',
-    redirect: {
-      name: 'error404'
-    }
-  } */
 
 
 
 ]
 
 export function createRouter() {
-
- /*  routes.push({
-    name: 'social_login',
-    path: '/social_login',
-    redirect(ctx) {
-		console.log("is_server ###", process.server)
-		//if (process.server) {
-	 		 console.log('in extendRoutes' + ctx);
-		//}
-      return '/login'
-    }
-  }) */
-
   const router = new Router({
     routes,
     mode: 'history'
   })
-
-
-
-
   return router
 }

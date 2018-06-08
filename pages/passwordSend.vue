@@ -56,12 +56,18 @@ export default {
 
         this.loading = false;
 
-        this.$toast.success(this.$t("password_send_done", { email: this.form.email }));
-   
-      } catch (resp) {
+        this.$toast.success(
+          this.$t("password_send_done", { email: this.form.email })
+        );
+      } catch (error) {
+        console.log("resp", error.response.data.errors);
         this.loading = false;
-        if (resp && resp.errors) {
-          this.setErrors(resp.errors);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          this.setErrors(error.response.data.errors);
         } else {
           this.clearErrors();
         }

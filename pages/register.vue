@@ -125,16 +125,23 @@ export default {
 
       try {
         // console.log(" register.vue before submit");
-				const  data = await this.$axios.$post("api/register", this.form);
-				console.log("register.vue after post", data)
+        const data = await this.$axios.$post("api/register", this.form);
+        console.log("register.vue after post", data);
         this.$store.dispatch("auth/login", data);
         this.loading = false;
-        this.$toast.success(this.$t("register_done", { email: this.form.email }));
+        this.$toast.success(
+          this.$t("register_done", { email: this.form.email })
+        );
         this.$router.push({ name: "activate_send" });
-       } catch (resp) {
+      } catch (error) {
+        console.log("resp", error.response.data.errors);
         this.loading = false;
-        if (resp && resp.errors) {
-          this.setErrors(resp.errors);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          this.setErrors(error.response.data.errors);
         } else {
           this.clearErrors();
         }

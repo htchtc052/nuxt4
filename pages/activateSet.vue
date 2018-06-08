@@ -22,24 +22,13 @@ export default {
     };
   },
   async mounted() {
-    console.log("activateSet mounted server_ok", this.server_ok);
-    this.loading = true;
-    if (this.server_ok) {
-      this.loading = false;
+    console.log("activateSet mounted server_ok");
 
-      this.$toast.success(this.$t("activate_set_done"));
+    this.loading = false;
 
-      this.$router.push({ name: "profile" });
-    } else {
-      console.log("activateSet fail");
-/* 
-      this.$toast.error(app.i18n.t("activate_set_error"));
+    this.$toast.success(this.$t("activate_set_done"));
 
-      this.loading = false;
-      if (this.$store.getters["auth/check"])
-        this.$router.push({ name: "profile" });
-      else this.$router.push({ name: "login" }); */
-    }
+    this.$router.push({ name: "profile" });
   },
   middleware: async ({ route, query, redirect, app, store }) => {
     console.log("activateSet midd ");
@@ -53,15 +42,21 @@ export default {
         console.log("activateSet midd token ok", data);
 
         store.dispatch("auth/login", data);
-        server_ok = true;
       } catch (error) {
-        server_ok = false;
-        console.log("activateSet midd token error", error ? error : null);
+        console.log(
+          "activateSet midd server error",
+          error.response ? true : error
+        );
+
+        app.context.error({
+          statusCode: 403,
+          message: app.i18n.t("activate_set_error")
+        });
       }
     }
-  },
-  asyncData() {
-    return { server_ok };
   }
+  /*   asyncData() {
+    return { server_ok };
+  } */
 };
 </script>

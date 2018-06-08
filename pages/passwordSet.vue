@@ -84,13 +84,23 @@ export default {
 
         this.loading = false;
 
-        this.$toast.success(this.$t("password_set_done"));
+        this.$toast.success(this.$t("password_set_done", {email: data.user.email}));
 
         this.$router.push({ name: "profile" });
-      } catch (resp) {
+      } catch (error) {
+        console.log("resp", error.response.data.errors);
         this.loading = false;
-        if (resp && resp.errors) {
-          this.setErrors(resp.errors);
+        if (error.response.status == 403) {
+           this.$toast.error(this.$t("password_set_error"))
+           this.$router.push({name: 'login'})
+        }
+
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          this.setErrors(error.response.data.errors);
         } else {
           this.clearErrors();
         }
@@ -123,10 +133,14 @@ export default {
       } catch (error) {
         console.log(
           "passwordSend midd server error",
-          error ? true : false,
-          error
+          error.response ? true : error
         );
-        //return redirect("/login?error_msg=password_set_error");
+
+        app.context.error({
+          statusCode: 403,
+          message: app.i18n.t("password_set_error")
+        });
+          //redirect("/login?error_msg=password_set_error")
       }
     }
   }

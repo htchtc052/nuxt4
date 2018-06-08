@@ -79,7 +79,7 @@ export default {
   },
   mounted() {
     if (this.$route.query.error_msg) {
-      this.$toast.error(this.$t(this.$route.query.error_msg))
+      this.$toast.error(this.$t(this.$route.query.error_msg));
       this.$router.push({ name: "login" });
     }
   },
@@ -88,25 +88,32 @@ export default {
       this.loading = true;
 
       try {
-        const data  = await this.$axios.$post("api/login", this.form);
-        
+        const data = await this.$axios.$post("api/login", this.form);
+
         this.$store.dispatch("auth/login", data);
         //this.$store.dispatch("auth/saveToken", data.token);
         this.loading = false;
 
-        this.$toast.success(this.$t("login_done") )
+        this.$toast.success(this.$t("login_done"));
 
         if (!this.$store.getters["auth/verified"]) {
           this.$router.push({ name: "activate_send" });
         } else {
           this.$router.push({ name: "profile" });
         }
-       } catch (resp) {
-         console.log("resp", resp)
+      } catch (error) {
+        console.log("resp", error.response.data.errors);
         this.loading = false;
-        if (resp && resp.errors) {
-          this.setErrors(resp.errors);
+       
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          this.setErrors(error.response.data.errors);
         } else {
+          
+          this.$toast.error(this.$t("server_error"));
           this.clearErrors();
         }
       }

@@ -2,22 +2,25 @@
 	<div id="mega-content">
 		<div class="card">
 			<h2 class="card-title mx-auto">
-				{{ $t('404_title') }}
+				{{ $t('music_title') }}
 			</h2>
 			    <div class="card-body">
-						{{ $t('403_text') }}
-				</div>  
+						{{ $t('develop_text') }}
+					</div>  
      		</div>
-    </div>
+			</div>
 
 </template>
 <script>
-
 export default {
   layout: "rm",
   data() {
     return {
     };
+  },
+  async mounted() {
+    console.log("lirycs mounted");
+
   },
   
 };

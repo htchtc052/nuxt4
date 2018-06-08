@@ -7,14 +7,16 @@
       </form>   
     </div>
     <nav class="rm-head__menu d-flex justify-content-end align-items-stretch pb-1">
-      <a href="/music/">музыка<span>974 434</span></a>
-      <a href="/slova/">стихи<span>90 828</span></a>
+      <nuxt-link :to="{name: 'music'}">{{ $t('music_title') }} <span>975 000</span></nuxt-link>
+      <nuxt-link :to="{name: 'lyrics'}">{{ $t('lyrics_title') }} <span>90 828</span></nuxt-link>
+     <!--
       <a href="/artists/">музыканты<span>102 313</span></a>
       <a href="/authors/">авторы<span>8 398</span></a>
       <a href="/video/">видео<span>70 963</span></a>
       <a href="/afisha/">афиша</a>
       <a href="/news/">новости</a>
       <a href="/radio/">радио</a>
+      -->
     </nav>
   </div>
 </template>
