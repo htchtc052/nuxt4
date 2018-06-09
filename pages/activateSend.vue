@@ -48,11 +48,13 @@ export default {
       try {
         await this.$axios.$post("api/activate_send_email");
         this.loading = false;
-        this.$toast.sucess(this.$t("activate_send_done", {email: this.user.email})).show();
-      } catch (errors) {
+        this.$toast.success(this.$t("activate_send_done", {email: this.user.email})).show();
+       } catch (error) {
+        console.log("error", error);
         this.loading = false;
+       
       }
-    }
+    },
   }
 };
 </script>
