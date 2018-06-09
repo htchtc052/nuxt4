@@ -79,10 +79,10 @@
 									<div class="form-group mx-auto">
 										<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('register_submit') }}</button>
 									</div>
-                                        <div class="form-group">
-                                            <div><a href="/forgot_password">{{ $t('forgot_password') }}</a></div>
-                                            <div><a href="/login">{{ $t('login_title') }}</a></div>
-                                        </div>
+										<div class="form-group">
+												<div><a href="/forgot_password">{{ $t('forgot_password') }}</a></div>
+												<div><a href="/login">{{ $t('login_title') }}</a></div>
+										</div>
 								</form>
 						<login-social />
 					</div>

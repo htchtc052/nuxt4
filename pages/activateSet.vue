@@ -12,7 +12,7 @@
 
 </template>
 <script>
-let server_ok = false;
+//let server_ok = false;
 
 export default {
   layout: "rm",
@@ -30,7 +30,7 @@ export default {
 
     this.$router.push({ name: "profile" });
   },
-  middleware: async ({ route, query, redirect, app, store }) => {
+  middleware: async ({ route, redirect, app, store }) => {
     console.log("activateSet midd ");
     if (process.server) {
       console.log("activateSet midd server");
