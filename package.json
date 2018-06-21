@@ -15,7 +15,7 @@
   },
   "engine": {
     "node": "8.9.4",
-    "npm": "5.6.0"
+    "npm": "6.1.0"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.1",
@@ -23,27 +23,27 @@
     "@nuxtjs/proxy": "^1.2.4",
     "@nuxtjs/router": "^1.0.1",
     "@nuxtjs/toast": "^3.0.1",
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.1.1",
     "cookie-universal-nuxt": "^2.0.3",
     "font-awesome": "^4.7.0",
     "font-awesome-sass-loader": "^2.0.1",
-    "howler": "^2.0.10",
+    "howler": "^2.0.12",
     "jquery": "^3.3.1",
     "math-clamp": "^1.0.0",
-    "node-sass": "^4.8.3",
-    "npm": "^5.8.0",
-    "nuxt": "^1.0.0",
-    "nuxt-sass-resources-loader": "^2.0.0",
-    "sass-loader": "^7.0.1",
-    "vue-i18n": "^7.7.0",
+    "node-sass": "^4.9.0",
+    "npm": "^6.1.0",
+    "nuxt": "^1.4.1",
+    "nuxt-sass-resources-loader": "^2.0.2",
+    "sass-loader": "^7.0.3",
+    "vue-i18n": "^7.8.0",
     "vue-style-loader": "^4.1.0",
-    "vuex-persistedstate": "^2.5.2"
+    "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
+    "babel-eslint": "^8.2.3",
     "eslint": "^4.15.0",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.7.1",
-    "eslint-plugin-vue": "^4.0.0"
+    "eslint-plugin-vue": "^4.5.0"
   }
 }

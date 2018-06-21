@@ -1,6 +1,5 @@
-{  
+{
   "main_page": "Главная страница",
-
   "email": "Email",
   "password": "Пароль",
   "confirm_password": "Повторите пароль",
@@ -8,7 +7,7 @@
   "name": "Имя",
   "settings": "Настройки",
   "login": "Вход на сайт",
-  "register":  "Регистрация",
+  "register": "Регистрация",
   "profile": "Профиль",
   "logout": "Выйти",
   "cancel": "Отмена",
@@ -32,18 +31,21 @@
   "edit_password_title": "Смена пароля",
   "edit_password_submit": "Сохранить",
   "edit_password_done": "Пароль изменен",
-
   "music_title": "Музыка",
   "lyrics_title": "Стихи",
+  "artists_title": "Музыканты",
+  "authors_title": "Авторы",
+  "video_title": "Видео",
+  "news_title": "Новости",
+  "afisha_title": "Афиша",
+  "radio_title": "Радио",
   "develop_text": "Страница в разработке",
-
-
   "sign_in": "Войти",
   "profile_as": "Профиль {name}",
   "activate_send_title": "Активация",
   "activate_send_text": "Вы должны подтвердить {email} для активации аккаунта",
   "activate_send_submit": "Отправить",
-  "activate_send_done": "Ссылка активация выслена на {email}",  
+  "activate_send_done": "Ссылка активация выслена на {email}",
   "activate_set_title": "Активация",
   "activate_set_text": "Активируется...",
   "activate_set_done": "Успешно активирован",
@@ -55,10 +57,10 @@
   "password_set_error": "Ошибка при установке нового пароля",
   "password_set_submit": "Сохранить",
   "password_set_done": "Пароль установлен для логина {email}",
-
-  "goto": "Перейти к {0}",
+  "social_login_text": "Авторизация...",
+  "goto_target": "Перейти к {0}",
   "goto_login": "входу на сайту",
-  "goto_main": "главной странице" ,
+  "goto_main": "главной странице",
   "error_network": "Ошибка соединения",
   "error_token_expired": "Авторизация устарела",
   "error_need_active": "Данное действие требует активированного аккаунта",
@@ -75,14 +77,12 @@
   "success_email_set": "Успешно установлен новый email {email}",
   "error_email_set": "Ссылка смены мейла устарела или неверная",
   "error_forbidden": "Доступ не авторизован",
-  "404_title": "Ошибка 404",
-  "404_text": "Страница не найдена",
-  "403_title": "Ошибка 403",
-  "403_text": "Доступ запрещен",
-  "401_title": "Ошибка 401",
-  "401_text": "Авторизация устарела",
-  "500_title": "Ошибка 500",
-  "500_text": "Внутренняя ошибка сервера",
+  "page404_title": "Ошибка 404",
+  "page404_text": "Страница не найдена",
+  "page403_title": "Ошибка 403",
+  "page403_text": "Доступ запрещен",
+  "page500_title": "Ошибка 500",
+  "page500_text": "Внутренняя ошибка сервера",
   "login_with": "Войти через",
   "github": "GitHub",
   "facebook": "Facebook",
@@ -91,6 +91,4 @@
   "vkontakte": "Вконтакте",
   "odnoklassniki": "Одноклассники",
   "mailru": "@mail.ru"
-
-
 }

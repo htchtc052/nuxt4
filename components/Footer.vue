@@ -24,7 +24,7 @@
         <div class="col-3">
             <strong>Сообщество</strong>
             <ul class="footer__list list-unstyled">
-              <li><a href="http://forum.realmusic.ru/">Форум</a></li>
+              <li><a href="#">Форум</a></li>
               <li><a href="/blogs">Блоги</a></li>
             </ul>
         </div>

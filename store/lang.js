@@ -1,45 +1,53 @@
+const localeStrings = {
+  en: "English",
+  ru: "Russian",
+}
+
+
 const state = () => ({
-  locale: 'ru',
-  locales: {
-    'en': 'EN',
-    'ru': 'RU'
-  }
+  locales: [{
+      code: 'en',
+      iso: 'en-US',
+      name: 'English'
+    },
+    {
+      code: 'ru',
+      iso: 'ru-RU',
+      name: 'Русский'
+    },
+  ],
+  locale: 'ru'
 })
 
+
 const getters = {
+  locales: state => state.locales,
   locale: state => state.locale,
-  locales: state => state.locales
+  localeFull: state => state.locales.filter(locale =>
+    state.locale === locale['code']
+  )[0],
+  //localesCodes: state => state.locales.map(locale => locale['code']),
 }
+
+
 
 const mutations = {
-  SET_LOCALE(state, {
-    locale
-  }) {
+  ['SET_LANG'](state, locale) {
+    console.log("SET_LANG", "locale", locale)
     state.locale = locale
-  }
-}
-
-
-const actions = {
-  setLocale({
-    commit
-  }, {
-    locale
-  }) {
-    commit('SET_LOCALE', {
-      locale
-    })
     this.$cookies.set('locale', locale, {
       path: '/',
       maxAge: 31536000
     })
+
   }
 }
+
+
 
 export default {
   namespaced: true,
   state: state,
-  actions: actions,
   getters: getters,
   mutations: mutations,
 }

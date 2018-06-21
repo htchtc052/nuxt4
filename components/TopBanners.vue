@@ -19,7 +19,7 @@
                         <span class="fas fa-question-circle"></span>
                         </a>
 
-                        <nuxt-link :to="{ name: 'pages-id', params: { id: track.page_id }}" class="font-weight-bold">{{ track.page_title }}</nuxt-link>
+                        <nuxt-link  :to="{path: '/music'}" class="font-weight-bold">{{ track.page_title }}</nuxt-link>
             
                         <div>
                         <span v-if="track.page_country_id" :class="'flagcountry_' + track.page_country_id" ></span>
@@ -32,7 +32,7 @@
                            <span :class="[ nowPlaying(index) ? 'fas fa-pause' : 'fas fa-play']"></span>
                           </a>
                         <div class="d-flex flex-column pl-2">
-                                <nuxt-link :to="{ name: 'pages-id', params: { id: track.page_id }}" class="font-weight-bold">{{ track.title }}</nuxt-link>
+                                <nuxt-link  :to="{path: '/music'}" class="font-weight-bold">{{ track.title }}</nuxt-link>
             
                             <small class="text-muted t-11">{{ track.genrename}}</small>
                         </div>

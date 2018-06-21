@@ -55,7 +55,7 @@
 <script>
 export default {
   layout: "rm",
-  computed: {},
+   nuxtI18n: false,
   data() {
     return {
       loading: false,
@@ -70,6 +70,9 @@ export default {
     };
   },
   mounted() {
+    console.log("mount password/set/:token");
+
+    
     (this.form.reset_password_token = this.$route.params.token),
       (this.form.email = this.$route.query.email);
   },
@@ -86,13 +89,13 @@ export default {
 
         this.$toast.success(this.$t("password_set_done", {email: data.user.email}));
 
-        this.$router.push({ name: "profile" });
+        this.$router.push(this.$i18n.path('profile'));
       } catch (error) {
         console.log("resp", error.response.data.errors);
         this.loading = false;
         if (error.response.status == 403) {
            this.$toast.error(this.$t("password_set_error"))
-           this.$router.push({name: 'login'})
+           this.$router.push(this.$i18n.path('login'));
         }
 
         if (
@@ -119,7 +122,7 @@ export default {
   },
   middleware: async ({ app, query, route, redirect, store }) => {
     if (process.server) {
-      console.log("passwordSend midd server");
+      console.log("password/set/:token midd server");
 
       try {
         const response = await app.$axios.$post(
@@ -129,10 +132,10 @@ export default {
             email: query.email
           }
         );
-        console.log("passwordSend midd server ok", response);
+        console.log("password/set/:token midd server ok", response);
       } catch (error) {
         console.log(
-          "passwordSend midd server error",
+          "password/set/:token midd server error",
           error.response ? true : error
         );
 

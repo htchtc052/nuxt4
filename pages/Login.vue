@@ -36,13 +36,9 @@
 								<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('login_submit') }}</button>
 							</div>
 								<div class="form-group">
-										<div><nuxt-link :to="{ name: 'password_send'}">{{ $t('forgot_password') }}</nuxt-link></div>
-                    <div><nuxt-link :to="{ name: 'register' }">{{ $t('register_title') }}</nuxt-link></div>
-                    <!--
-                    <div><nuxt-link :to="{ name: 'password_set', params: { token: 'test' } }">{{ $t('password_set_title') }}</nuxt-link></div>
-                    <div><nuxt-link :to="{ name: 'profile' }">Profile</nuxt-link></div>
-                    <div><a  href="/">Main page</a></div>
-                    -->
+										<div><nuxt-link :to="$i18n.path('password/send')">{{ $t('forgot_password') }}</nuxt-link></div>
+                    <div><nuxt-link :to="$i18n.path('register')">{{ $t('register_title') }}</nuxt-link></div>
+            
 					
                 </div>
 						</form>
@@ -80,7 +76,7 @@ export default {
   mounted() {
     if (this.$route.query.error_msg) {
       this.$toast.error(this.$t(this.$route.query.error_msg));
-      this.$router.push({ name: "login" });
+      this.$router.push(this.$i18n.path('login'));
     }
   },
   methods: {
@@ -94,15 +90,14 @@ export default {
         //this.$store.dispatch("auth/saveToken", data.token);
         this.loading = false;
 
-        this.$toast.success(this.$t("login_done"));
-
+        
         if (!this.$store.getters["auth/verified"]) {
-          this.$router.push({ name: "activate_send" });
+          this.$router.push(this.$i18n.path('activate_send'));
         } else {
-          this.$router.push({ name: "profile" });
-        }
+          this.$router.push(this.$i18n.path('profile'));
+        } 
       } catch (error) {
-        console.log("resp", error.response.data.errors);
+        console.log("resp", error);
         this.loading = false;
        
         if (

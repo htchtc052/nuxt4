@@ -1,7 +1,8 @@
 const webpack = require('webpack')
 
+
 module.exports = {
-  
+
   env: {
     apiURL: 'http://localhost:8081'
   },
@@ -53,8 +54,8 @@ module.exports = {
     color: '#3B8070'
   },
   modules: [
-    '@nuxtjs/toast',
     '@nuxtjs/router',
+    '@nuxtjs/toast',
     '@nuxtjs/axios', ['cookie-universal-nuxt', {
       parseJSON: false
     }],
@@ -72,20 +73,14 @@ module.exports = {
     browserBaseUrl: 'http://localhost:8081',
   },
   plugins: [
-  /*   {
-      src: '~/plugins/vuejs-noty',
-      ssr: false
-    }, */
-    {
-      src: '~plugins/i18n',
-      ssr: true
-    },
     {
       src: '~plugins/axios',
       ssr: true
     },
-    
-    
+    {
+      src: '~plugins/i18n',
+      ssr: true
+    },
     {
       src: '~plugins/tracksHelper.js',
       ssr: false
@@ -105,12 +100,12 @@ module.exports = {
   }],
   router: {
     middleware: [
-      'locale',
-      'check-auth'
+      'check-auth',
+      'i18n'
     ]
   },
+  
   build: {
-    //vendor: ['axios'],
 
     plugins: [
       new webpack.ProvidePlugin({

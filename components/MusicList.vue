@@ -6,10 +6,11 @@
                      <span :class="[ nowPlaying(index) ? 'fas fa-pause' : 'fas fa-play']"></span>
                      <img class="rounded" :src="'https://www.realmusic.ru/img.php?src=/media/bandimg/' + (track.page_id % 10) + '/' + track.page_id + '.jpg&w=60&h=60'" />
                 </a>
+                <!--  params: { id: track.page_id }} -->
                  <div class="pl-2 w-100">
-                    <nuxt-link :to="{ name: 'pages-id', params: { id: track.page_id }}" class="font-weight-bold">{{ track.title }}</nuxt-link>
+                    <nuxt-link :to="{path: '/music'}" class="font-weight-bold">{{ track.title }}</nuxt-link>
                     <p class="font-italic pt-1 t-13">
-                    <nuxt-link :to="{ name: 'pages-id', params: { id: track.page_id }}" class="text-nolink">{{ track.page_title }}</nuxt-link>
+                    <nuxt-link  :to="{path: '/music'}" class="text-nolink">{{ track.page_title }}</nuxt-link>
                     </p>
                 </div>
                 <span class="text-right pl-3 pt-1 text-nowrap">

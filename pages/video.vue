@@ -2,7 +2,7 @@
 	<div id="mega-content">
 		<div class="card">
 			<h2 class="card-title mx-auto">
-				{{ $t('music_title') }}
+				{{ $t('video_title') }}
 			</h2>
 			    <div class="card-body">
 						{{ $t('develop_text') }}
@@ -13,6 +13,14 @@
 </template>
 <script>
 export default {
-  layout: "rm", 
-}
+  layout: "rm",
+  data() {
+    return {
+    };
+  },
+  async mounted() {
+
+  },
+  
+};
 </script>

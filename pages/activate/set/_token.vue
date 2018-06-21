@@ -16,24 +16,25 @@
 
 export default {
   layout: "rm",
+   nuxtI18n: false,
   data() {
     return {
       loading: false
     };
   },
   async mounted() {
-    console.log("activateSet mounted server_ok");
+    console.log("activate/set/:token mounted server_ok");
 
     this.loading = false;
 
     this.$toast.success(this.$t("activate_set_done"));
 
-    this.$router.push({ name: "profile" });
+    this.$router.push(this.$i18n.path('profile'));
   },
   middleware: async ({ route, redirect, app, store }) => {
     console.log("activateSet midd ");
     if (process.server) {
-      console.log("activateSet midd server");
+      console.log("activate/set/:token midd server");
 
       try {
         const data = await app.$axios.$post("api/activate_set", {
@@ -55,8 +56,5 @@ export default {
       }
     }
   }
-  /*   asyncData() {
-    return { server_ok };
-  } */
 };
 </script>

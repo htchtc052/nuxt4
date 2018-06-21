@@ -1,11 +1,12 @@
+
+
 <template>
-	
-	<div class="mx-auto">
+
+		<div id="mega-content">
 		<div class="card">
-			<h2 class="card-title mx-auto">
-				{{ $t('edit_password_title') }}
-			</h2>
+			<ProfileMenu :user=user></ProfileMenu>
 			<div class="card-body">
+				
 					<form @submit.prevent="submit" role="form" class="form">
 							<div class="form-group">
 								<label for="password">{{ $t('new_password') }}</label>
@@ -36,14 +37,22 @@
 							<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('edit_password_submit') }}</button>
 						</div>
 					</form>
-			</div>
-		</div>
+	</div>
+	</div>
 	</div>
 
 </template>
+
 <script>
+import { mapState, mapGetters } from "vuex";
+import ProfileMenu from '~/components/ProfileMenu.vue'
+
 export default {
-  computed: {},
+  middleware: ["auth", "verified"],
+  layout: "rm",
+  components: {
+		ProfileMenu
+	},
   metaInfo() {},
   data() {
     return {
@@ -58,6 +67,11 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapGetters({
+      user: "auth/user"
+    })
+  },
   methods: {
     async submit() {
       this.loading = true;
@@ -66,7 +80,8 @@ export default {
 
         this.loading = false;
         this.$toast.success(this.$t("edit_password_done"));
-        this.$router.push({ name: "profile" });
+        
+        this.$router.push(this.$i18n.path('profile'));
       } catch (error) {
         console.log("resp", error.response.data.errors);
         this.loading = false;

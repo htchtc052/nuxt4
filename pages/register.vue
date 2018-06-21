@@ -80,8 +80,9 @@
 										<button type="submit" class="btn btn-primary btn-lg btn-block" :class="{ 'btn-loading': loading }" :disabled="loading">{{ $t('register_submit') }}</button>
 									</div>
 										<div class="form-group">
-												<div><a href="/forgot_password">{{ $t('forgot_password') }}</a></div>
-												<div><a href="/login">{{ $t('login_title') }}</a></div>
+									<div><nuxt-link :to="$i18n.path('password/send')">{{ $t('forgot_password') }}</nuxt-link></div>
+                    <div><nuxt-link :to="$i18n.path('login')">{{ $t('login_title') }}</nuxt-link></div>
+            
 										</div>
 								</form>
 						<login-social />
@@ -132,7 +133,7 @@ export default {
         this.$toast.success(
           this.$t("register_done", { email: this.form.email })
         );
-        this.$router.push({ name: "activate_send" });
+        this.$router.push(this.$i18n.path('activate/send'));
       } catch (error) {
         console.log("resp", error.response.data.errors);
         this.loading = false;

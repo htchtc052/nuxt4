@@ -1,33 +1,29 @@
 <template>
-<div>
-    <div class="container" v-if="error.statusCode === 404">
-        <h1>{{ $t("404_title") }}</h1>
-        <div>{{ $t("404_text") }}</div>
+  <div>
+    <div class="container" v-if="error.statusCode == 404">
+      <error404></error404>
     </div>
-
-    <div class="container" v-if="error.statusCode === 500">
-        <h1>{{ $t("500_title") }}</h1>
+    <div class="container" v-else-if="error.statusCode == 403">
+      <error403 :error="error"></error403>
     </div>
-
-    <div class="container" v-if="error.statusCode === 401">
-        <h1>{{ $t("401_title") }}</h1>
+    <div class="container" v-else>
+      <error500 :error="error"></error500>
     </div>
-
-    <div class="container" v-if="error.statusCode === 403">
-        <h1>{{ $t("403_title") }}</h1>
-    </div>
-
-    <div>{{ error.message }} </div>
-
-    <i18n path="goto" tag="div" v-if="error.statusCode === 500 || error.statusCode === 404 || error.statusCode == 403"><a href="/">{{ $t('goto_main') }}</a></i18n>
-    <i18n path="goto" tag="div" v-if="error.statusCode === 401"><a href="/login">{{ $t('goto_login') }}</a></i18n>
-
-</div>
+  </div>
 </template>
 
+
 <script>
+import error404 from "~/components/error404.vue";
+import error403 from "~/components/error403.vue";
+import error500 from "~/components/error500.vue";
 export default {
   props: ["error"],
-  layout: "rm" // you can set a custom layout for the error page
+  layout: "rm",
+  components: {
+    error404,
+    error403,
+    error500
+  }
 };
 </script>

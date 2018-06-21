@@ -49,6 +49,7 @@ export default {
         await this.$axios.$post("api/activate_send_email");
         this.loading = false;
         this.$toast.success(this.$t("activate_send_done", {email: this.user.email})).show();
+        //this.$router.push(this.localePath('profile'))
        } catch (error) {
         console.log("error", error);
         this.loading = false;

@@ -1,4 +1,5 @@
-{  
+{
+  "test1": "test1",
   "main_page": "Main page",
   "email": "Email",
   "password": "Password",
@@ -7,10 +8,10 @@
   "name": "Name",
   "settings": "Settings",
   "login": "Login",
-  "register":  "Register",
+  "register": "Register",
   "profile": "Profile",
   "logout": "Logout",
-  "cancel": "Cancel", 
+  "cancel": "Cancel",
   "login_title": "Login",
   "login_done": "Login success",
   "login_submit": "Login",
@@ -31,11 +32,15 @@
   "edit_password_title": "Change password",
   "edit_password_submit": "Save",
   "edit_password_done": "Password changed",
-
   "music_title": "Music",
   "lyrics_title": "Lyrics",
+  "artists_title": "Artists",
+  "authors_title": "Authors",
+  "video_title": "Video",
+  "news_title": "News",
+  "afisha_title": "Events",
+  "radio_title": "Radio",
   "develop_text": "Page in development",
-
   "sign_in": "Sign in",
   "profile_as": "Profile {name}",
   "activate_send_title": "Activation",
@@ -53,8 +58,8 @@
   "password_set_error": "Error set new password",
   "password_set_submit": "Save",
   "password_set_done": "Password set for login {email}",
-
-  "goto": "Go to {0}",
+  "social_login_text": "Logging in...",
+  "goto_target": "Go to {0}",
   "goto_login": "login page",
   "goto_main": "main page",
   "error_network": "Network error",
@@ -73,14 +78,12 @@
   "success_email_set": "Success set new email {email}",
   "error_email_set": "Set new email link expired or invalid",
   "error_forbidden": "Access forbidden",
-  "404_title": "Error 404",
-  "404_text": "Page not found",
-  "403_title": "Error 403",
-  "403_text": "Forbidden",
-  "401_title": "Error 401",
-  "401_text": "Authorization expired",
-  "500_title": "Error 500",
-  "500_text": "Internal server error",
+  "page404_title": "Error 404",
+  "page404_text": "Page not found",
+  "page403_title": "Error 403",
+  "page403_text": "Forbidden",
+  "page500_title": "Error 500",
+  "page500_text": "Internal server error",
   "login_with": "Login with",
   "github": "GitHub",
   "facebook": "Facebook",
@@ -89,7 +92,4 @@
   "vkontakte": "Vkontakte",
   "odnoklassniki": "Оdnoklassniki",
   "mailru": "@mail.ru"
-
-
-  
 }

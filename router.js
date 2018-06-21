@@ -1,120 +1,163 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {
-  scrollBehavior
-} from '~/utils'
 
 Vue.use(Router)
 
-import IndexPage from '~/pages/index.vue'
-import PageDetail from '~/pages/pages/_id.vue'
-import Login from '~/pages/login.vue'
-import Register from '~/pages/register.vue'
-import ProfileWrapper from '~/pages/profile/profileWrapper.vue'
-import Profile from '~/pages/profile/profile.vue'
-import EditProfile from '~/pages/profile/editProfile.vue'
-import EditPassword from '~/pages/profile/editPassword.vue'
-import ActivateSend from '~/pages/activateSend.vue'
-import PasswordSend from '~/pages/passwordSend.vue'
-import PasswordSet from '~/pages/passwordSet.vue'
-import ActivateSet from '~/pages/activateSet.vue'
-import Music from '~/pages/music.vue'
-import Lyrics from '~/pages/lyrics.vue'
+const social = () =>
+  import ('~/pages/social/_token.vue').then(m => m.default || m)
+
+const index = () =>
+  import ('~/pages/index.vue').then(m => m.default || m)
+const music = () =>
+  import ('~/pages/music.vue').then(m => m.default || m)
+const lyrics = () =>
+  import ('~/pages/lyrics.vue').then(m => m.default || m)
+
+
+const login = () =>
+  import ('~/pages/login.vue').then(m => m.default || m)
+const register = () =>
+  import ('~/pages/register.vue').then(m => m.default || m)
+const passwordSend = () =>
+  import ('~/pages/password/send.vue').then(m => m.default || m)
+const passwordSet = () =>
+  import ('~/pages/password/set/_token.vue').then(m => m.default || m)
+const activateSend = () =>
+  import ('~/pages/activate/send.vue').then(m => m.default || m)
+const activateSet = () =>
+  import ('~/pages/activate/set/_token.vue').then(m => m.default || m)
+
+
+const profile = () =>
+  import ('~/pages/profile/index.vue').then(m => m.default || m)
+const profilePassword = () =>
+  import ('~/pages/profile/password.vue').then(m => m.default || m)
+// const profileEmail = () =>
+//   import ('~/pages/_lang/profile/email.vue').then(m => m.default || m)
+const profileInfo = () =>
+  import ('~/pages/profile/info.vue').then(m => m.default || m)
+
+const error404 = () =>
+  import ('~/components/error404.vue').then(m => m.default || m)
+
 
 const routes = [{
-    path: '/',
-    name: 'welcome',
-    component: IndexPage
+    path: "/social/:token",
+    component: social,
+    name: "social",
+  }, {
+    path: "/music",
+    component: music,
+    name: "music"
+  }, {
+    path: "/:lang/music",
+    component: music,
+    name: "lang-music"
+  }, {
+    path: "/lyrics",
+    component: lyrics,
+    name: "lyrics"
+  }, {
+    path: "/:lang/lyrics",
+    component: music,
+    name: "lang-lyrics"
+  }, {
+    path: "/login",
+    component: login,
+    name: "login"
+  }, {
+    path: "/:lang/login",
+    component: login,
+    name: "lang-login"
+  }, {
+    path: "/register",
+    component: register,
+    name: "register"
+  }, {
+    path: "/:lang/register",
+    component: register,
+    name: "lang-register"
+  }, {
+    path: "/password/send",
+    component: passwordSend,
+    name: "password-send"
+  }, {
+    path: "/:lang/password/send",
+    component: passwordSend,
+    name: "lang-password-send"
+  }, {
+    path: "/password/set/:token",
+    component: passwordSet,
+    name: "password-set"
+  }, {
+    path: "/:lang/password/set/:token",
+    component: passwordSet,
+    name: "lang-password-set"
+  }, {
+    path: "/activate/send",
+    component: activateSend,
+    name: "activate-send"
+  }, {
+    path: "/:lang/activate/send",
+    component: activateSend,
+    name: "lang-activate-send"
+  }, {
+    path: "/activate/set/:token",
+    component: activateSet,
+    name: "activate-set"
+  }, {
+    path: "/:lang/activate/set/:token",
+    component: activateSet,
+    name: "lang-activate-set"
+  }, {
+    path: "/profile",
+    component: profile,
+    name: "profile"
+  }, {
+    path: "/:lang/profile",
+    component: profile,
+    name: "lang-profile"
+  }, {
+    path: "/profile/info",
+    component: profileInfo,
+    name: "profile-info"
+  }, {
+    path: "/:lang/profile/info",
+    component: profileInfo,
+    name: "lang-profile-info"
+  }, {
+    path: "/profile/password",
+    component: profilePassword,
+    name: "profile-password"
+  }, {
+    path: "/:lang/profile/password",
+    component: profilePassword,
+    name: "lang-profile-password"
+  }, {
+    path: "/:lang",
+    component: index,
+    name: "lang-index"
+  }, {
+    path: "/",
+    component: index,
+    name: "index",
   },
   {
-    path: '/pages/:id',
-    name: 'pages-id',
-    component: PageDetail
-  },
+    path: "/:lang/*",
+    component: error404,
+    name: "lang-error404",
+  },  
   {
-    path: '/login',
-    name: 'login',
-    component: Login
-  },
-  {
-    path: '/register',
-    name: 'register',
-    component: Register
-  },
-  {
-    path: '/music',
-    name: 'music',
-    component: Music
-  },
-  {
-    path: '/lyrics',
-    name: 'lyrics',
-    component: Lyrics
-  },
-  {
-    path: '/activate_send',
-    name: 'activate_send',
-    component: ActivateSend
-  },
-  {
-    path: '/password_send',
-    name: 'password_send',
-    component: PasswordSend
-  },
-  {
-    path: '/password_set/:token',
-    name: 'password_set',
-    component: PasswordSet
-  },
-  {
-    path: '/activate_set/:token',
-    name: 'activate_set',
-    component: ActivateSet
-  },
-  /* {
-    name: 'social_login',
-    path: '/social_login',
-    redirect(to) {
-		console.log('social_login' + to);
-	    return '/login'
-	}
-  }, */
-  {
-    path: '/profile',
-    component: ProfileWrapper,
-    children: [{
-        path: '',
-        name: 'profile',
-        component: Profile,
-      },
-      {
-        path: 'edit-profile',
-        name: 'profile.editProfile',
-        component: EditProfile,
-      },
-      {
-        path: 'edit-password',
-        name: 'profile.editPassword',
-        component: EditPassword,
-      },
-      /*
-      	 	{
-      				path: 'edit-email',
-      				name: 'profile.editEmail',
-      				component: EditEmail,
-      			}, */
-
-    ]
-  },
-
-
+    path: "*",
+    component: error404,
+    name: "error404",
+  },   
 
 ]
 
 export function createRouter() {
-  const router = new Router({
+  return new Router({
     routes,
     mode: 'history'
   })
-  return router
 }

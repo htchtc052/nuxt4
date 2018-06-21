@@ -46,6 +46,8 @@
 import { mapGetters } from "vuex";
 
 export default {
+  middleware: ["auth", "verified"],
+  layout: "rm",
   i18n: {
     messages: {
       en: {

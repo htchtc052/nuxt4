@@ -14,6 +14,8 @@ export default function ({
     }
 
     const locale = store.getters['lang/locale']
+    console.log("$axios req locale", locale)
+  
     if (locale) {
       request.headers.common['Accept-Language'] = locale
     }
@@ -53,7 +55,7 @@ export default function ({
     } else if (error.response.status == 401) {
       console.log("$axios 401")
       store.dispatch("auth/logout")
-      return Promise.reject()
+      return Promise.reject(error)
     } 
   
     return Promise.reject(error);
