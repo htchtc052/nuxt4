@@ -106,7 +106,7 @@ module.exports = {
   },
   
   build: {
-
+    vendor: ['vue-i18n'],
     plugins: [
       new webpack.ProvidePlugin({
         '$': 'jquery',

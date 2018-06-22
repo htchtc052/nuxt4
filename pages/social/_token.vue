@@ -40,6 +40,15 @@ export default {
         const data = Object.assign({}, user,  {
             token:  route.params.token,
         })
+    
+        const locale = app.$cookies.get('locale')
+        console.log("sociale get locale from cookie", locale ? locale : null)
+
+        if (locale) {
+          store.commit('lang/SET_LANG', locale);
+          app.i18n.locale = locale;
+        }
+
         //console.log("social_login midd", data)
         store.dispatch("auth/login", data);
       } catch (error) {
@@ -47,6 +56,7 @@ export default {
           "social_login/:token server error",
            error && error.response && error.response.data ? error.response.data : error
         );
+
 
         //return redirect(app.localePath('login') + "?error_msg=error_social")
          app.context.error({

@@ -86,7 +86,7 @@ export default {
         await this.$store.dispatch("auth/logout");
       } catch (e) {}
 
-      this.$router.push(this.localePath("login"));
+      this.$router.push(this.$i18n.path("login"));
     }
   }
 };

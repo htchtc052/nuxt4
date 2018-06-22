@@ -1,6 +1,6 @@
 <template>
 		<div id="mega-content">
-		<div class="card">
+		<div class="card" v-if="check">
 			<ProfileMenu :user=user></ProfileMenu>
 		
 			<div class="card-body">
@@ -28,7 +28,8 @@ export default {
 		ProfileMenu
 	},
   computed: mapGetters({
-    user: "auth/user"
+		user: "auth/user",
+		check: "auth/check"
   }),
 
 };
