@@ -110,6 +110,7 @@ export default {
       }
     },
     setErrors(errors) {
+      
       this.error.password = errors.password ? errors.password[0] : null;
       this.error.confirm_password = errors.confirm_password
         ? errors.confirm_password[0]
